@@ -6,7 +6,7 @@ if (process.env.DATABASE_URL) {
 
     var match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/)
     var connection = new Sequelize(match[5], match[1], match[2], {
-        dialect: 'postgres', // postgres is free in heroku
+        dialect: 'postgres', 
         protocol: 'postgres',
         port: match[4],
         host: match[3],
