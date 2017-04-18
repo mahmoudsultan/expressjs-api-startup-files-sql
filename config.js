@@ -13,7 +13,9 @@ var config = {
                     idle: 10000
                 }
             }
-        }
+        },
+        force: true, // forcing sequelizer to drop tables
+        port: 8000
     }
 };
 

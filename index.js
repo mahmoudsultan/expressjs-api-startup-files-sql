@@ -3,12 +3,13 @@ const app = express();
 const moviesRouter = require('./routes/movies'),
     bodyParser = require('body-parser'),
     Sequelize = require('sequelize'),
-    connection = require('./models/main')('connection');
+    connection = require('./models/main')('connection'),
+    config = require('./config');
 
 /* Database and models setup */
 
-// force: true here is only in the development env
-connection.sync({force: true}).then(function() {
+// force: true here is only in the development env change in config.js
+connection.sync({force: config.force}).then(function() {
     console.log('Database created succesfully...');
 });
 
@@ -38,7 +39,7 @@ app.get('*', function(req, res) {
     // Add 404 page if applicable
 });
 
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || config.port;
 app.listen(port, function() {
     console.log('Server running on port: ', port);
 });
