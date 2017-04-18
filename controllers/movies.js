@@ -17,8 +17,14 @@ var show = function(req, res) {
     //     res.status(200).send(movies[id]);
     // }
     Movies.findById(id).then(function(movie) {
-        res.send(movie).end();
-    })
+        if (movie === null) {
+            res.status(404).send({error: "Movie not found"}).end();
+        } else {
+            res.send(movie).end();
+        }
+    }).catch(error => {
+        res.status(400).send({error: error}).end();
+    });
 };
 
 var post = function(req, res) {
