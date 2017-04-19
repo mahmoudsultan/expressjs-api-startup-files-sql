@@ -23,7 +23,7 @@ connection.sync({
     console.log('Database created succesfully...');
     return User.create({
         name: "test",
-        password: "$2a$10$XNKYee17pb75pD0eklzEUeh2I/BnsU.vxdYRHS/gR/3ruyiT0ooi."
+        password: "12345"
     })
 }).then(function(user) {
     console.log("User created successfully");

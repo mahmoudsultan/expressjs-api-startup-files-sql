@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs');
+
 module.exports = function (sequelizer, DataTypes) {
     return sequelizer.define('users', {
         name: {
@@ -12,6 +14,14 @@ module.exports = function (sequelizer, DataTypes) {
         token: {
             type: DataTypes.STRING,
             unique: true
+        }
+    }, {
+        hooks: {
+            afterValidate: function (user, options) {
+                // hash the password after it's validated and before inserting
+                // into the table
+                user.password = bcrypt.hashSync(user.password);
+            }
         }
     });
 };
