@@ -25,7 +25,7 @@ connection.sync({
         name: "test",
         password: "12345"
     })
-}).then(function(user) {
+}).then(function (user) {
     console.log("User created successfully");
 }).catch(console.log);
 
@@ -55,6 +55,7 @@ app.use(function (req, res, next) {
 app.use('/movies', passport.authenticate('bearer', {
     session: false
 }), moviesRouter);
+
 app.use('/users', usersRouter);
 
 
