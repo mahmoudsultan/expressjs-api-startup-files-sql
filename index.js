@@ -21,12 +21,12 @@ connection.sync({
     force: config.force
 }).then(function () {
     console.log('Database created succesfully...');
-    return User.create({
-        name: "test",
-        password: "12345"
-    })
-}).then(function (user) {
-    console.log("User created successfully");
+//     return User.create({
+//         name: "test",
+//         password: "12345"
+//     })
+// }).then(function (user) {
+//     console.log("User created successfully");
 }).catch(console.log);
 
 // setup the body parser middelware
