@@ -2,13 +2,14 @@
 --------------
 
 **What?**<br/>
-it's a rails-inspired simple starter files and mvc structures for REST api applications using MVC design pattern, **with Heroku deployment support**.
+it's a rails-inspired simple starter files and mvc structures for REST api applications using MVC design pattern,with http bearer **authentication**, login route, and authentication token generator,and **Heroku** deployment support.
 
 **Dependencies**:
 * NodeJS
 * ExpressJS
 * SequelizerJS
 * Testing: MochaJS, Supertest, ShouldJS
+* Authentication: PassportJS, passport-http-bearer Strategy
 
 **Getting Started**:
 ----
