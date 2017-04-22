@@ -11,6 +11,7 @@ const strategySetup = require('./helpers/auth_setup');
 // Routers importing
 const moviesRouter = require('./routes/movies');
 const usersRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
@@ -21,12 +22,14 @@ connection.sync({
     force: config.force
 }).then(function () {
     console.log('Database created succesfully...');
-//     return User.create({
-//         name: "test",
-//         password: "12345"
-//     })
-// }).then(function (user) {
-//     console.log("User created successfully");
+    return User.create({
+        alias: "test",
+        password: "123456789",
+        name: "test",
+        email:  "test@test.com"
+    })
+}).then(function (user) {
+    console.log("User created successfully");
 }).catch(console.log);
 
 // setup the body parser middelware
@@ -58,6 +61,8 @@ app.use('/movies', passport.authenticate('bearer', {
 
 app.use('/users', usersRouter);
 
+// TODO: important need authentication for the admin route
+app.use('/admin', adminRouter);
 
 // app.get('/', function(req, res) {
 //     res.status(200).sendFile("index.html");
