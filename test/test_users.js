@@ -16,7 +16,8 @@ describe("Users Routers Test", function () {
             alias: 'test2',
             password: '123456789',
             name: 'test_name',
-            email: 'test@test.com'
+            email: 'test@test.com',
+            token: "test_token"
         }).then(function (createdUser) {
             user = createdUser;
             done()
@@ -82,6 +83,28 @@ describe("Users Routers Test", function () {
             })
     });
 
+    it("Should update the user if authorized", function (done) {
+        agent.put('/users/' + user.alias)
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                name: "new_name",
+                key: "invalid_key"
+            }).expect(200).end(function (err, res) {
+                if (err) return done(err);
+                User.findOne({
+                    where: {
+                        alias: user.alias
+                    }
+                }).then(function (user) {
+                    (user.name == "new_name").should.equal(true);
+                    (user.key != "invalid_key").should.equal(true);
+                    done();
+                }).catch(done);
+            })
+    });
+
+
+
     // POST /users/logout
     it("should logout by changin the token", function (done) {
         agent.post('/users/logout')
@@ -101,6 +124,7 @@ describe("Users Routers Test", function () {
                 }).catch(done);
             });
     });
+
 
     after(function (done) {
         user.destroy().then(done());

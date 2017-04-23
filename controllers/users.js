@@ -25,8 +25,29 @@ function show(req, res) {
         } else {
             res.status(200).send(user).end();
         }
-    }).catch(function(err) {
-        res.status(500).send({error: err}).end();
+    }).catch(function (err) {
+        res.status(500).send({
+            error: err
+        }).end();
+    })
+}
+
+
+// PUT /users/:alias
+function update(req, res) {
+    User.update(req.body, {
+        where: {
+            alias: req.params.alias
+        },
+        fields: ['alias', 'email', 'collage', 'department', 'name']
+    }).then(function (user) {
+        if (!user) res.status(404).end();
+
+        res.status(200).send(user).end();
+    }).catch(function (err) {
+        res.status(500).send({
+            error: err
+        }).end();
     })
 }
 
@@ -104,5 +125,6 @@ module.exports = {
     login: login,
     logout: logout,
     index: index,
-    show: show
+    show: show,
+    update: update
 };

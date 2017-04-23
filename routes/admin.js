@@ -3,6 +3,8 @@ const express = require('express'),
     adminController = require('../controllers/admin');
 
 
-router.use('/create/user', adminController.createUser);
+router.post('/create/user', adminController.createUser);
+router.post('/update/key', adminController.updateKey);
+router.post('/delete/user', adminController.deleteUser);
 
 module.exports = router;
