@@ -26,6 +26,7 @@ var Users = connection.import(__dirname + '/user.js');
 
 // if there's any relations put it here
 Users.hasMany(Movies);
+Movies.belongsTo(Users);
 
 
 // setup the array of modules

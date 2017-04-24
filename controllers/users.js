@@ -51,6 +51,23 @@ function update(req, res) {
     })
 }
 
+function updateWrapper(req, res) {
+    User.findOne({
+        where: {
+            token: req.get('Authorization').slice(7)
+        }
+    }).then(function (editingUser) {
+        if (editingUser.alias != req.params.alias) {
+            res.status(401).end();
+        } else {
+            return update(req, res);
+        }
+    }).catch(function (err) {
+        res.status(500).send({error: err}).end();
+    })
+}
+
+
 // POST /logout Authorization: token logs out a user
 function logout(req, res) {
     // get the auth_token form the header of the request
@@ -126,5 +143,5 @@ module.exports = {
     logout: logout,
     index: index,
     show: show,
-    update: update
+    update: updateWrapper
 };

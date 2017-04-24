@@ -1,37 +1,54 @@
-**ExpressJS REST API MVC application Boilerplate**
---------------
+ITW Mobile Application Backend API
+------------------------------------
 
-**What?**<br/>
-it's a rails-inspired simple starter files and mvc structures for REST api applications using MVC design pattern,with http bearer **authentication**, login route, and authentication token generator,and **Heroku** deployment support.
+ENDPOINTS
+------------
 
-**Dependencies**:
-* NodeJS
-* ExpressJS
-* SequelizerJS
-* Testing: MochaJS, Supertest, ShouldJS
-* Authentication: PassportJS, passport-http-bearer Strategy
-
-**Getting Started**:
+**Users**:
 ----
-```
-// clone the repo
-git clone git@github.com:mahmoudsultan/expressjs-api-startup-files-sql.git
+    GET /users/ (200)=> returns a list of all users
 
-// clear .git and start over
-rm -rf .git && git init
+    GET /users/:alias (200) => returns the information of the specified user
 
-// edit package.json to change project info
+    POST /users/login (200)
+        Request Body = {
+            alias: ..
+            password: ..
+        }
+    => logs the user in if the information provided is valid or else a 400 will be initiated
+    => the authentication key will be provided in the 'Authorization' Header in form 'Bearer Auth-Key'
 
-// install dependencies
-npm install
+    POST /users/logout (200)
+        Authorization Header = 'Bearer Auth-key'
+    => the user will be logged out and a new authentication key will be created making the old one invalid.
 
-// run it
-npm start
+    PUT /users/:alias (200)
+        Authorization Header = 'Bearer Auth-key'
+    => if the auth key matches that of the user being updated the fields permitted will be updated with the information given in the request body
+    => fileds permitted: alias, name, email, collage, and department.
 
-// test it - make sure that's running before testing
-npm test
-```
+**Admin**
+-------
+    POST /admin/create/user (201)
+        Request Body = {
+            alias: user alias
+            name: user full name
+            password: password unencreapted
+            email: da
+            collage: optional
+            department: optional
+        }
+    => Creates the user and returns the information with the id of the newly created record.
 
-License
-----
-MIT
+    POST /admin/delete/user (200)
+        Request body =  {
+        id: user's - that's to be deleted -  id 
+        }
+    => deletes the user denoted by this alias
+
+    POST /admin/update/key (200)
+        Request body = {
+            id: user's id
+            key: the new key
+        }
+    => updates the user's ticket key.
