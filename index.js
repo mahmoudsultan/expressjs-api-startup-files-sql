@@ -12,6 +12,7 @@ const strategySetup = require('./helpers/auth_setup');
 const moviesRouter = require('./routes/movies');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
+const notificationsRouter = require('./routes/notifications');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
@@ -67,6 +68,12 @@ app.use('/admin', adminRouter);
 // app.get('/', function(req, res) {
 //     res.status(200).sendFile("index.html");
 // });
+
+app.get('/notification', function(req, res) {
+    res.status(200).sendFile(__dirname +"/public/not.html");
+});
+
+app.use('/notify', notificationsRouter);
 
 app.get('*', function (req, res) {
     res.status(404).end();

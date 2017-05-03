@@ -1,5 +1,14 @@
 var User = require('../models/main')('users');
+var Pusher = require('pusher'),
+    config = require('../config');
 
+const pusher = new Pusher({
+  appId: config.pusher.appId,
+  key: config.pusher.key,
+  secret: config.pusher.secret,
+  cluster: config.pusher.cluster,
+  encrypted: true
+});
 
 function createUser(req, res) {
     /*  
@@ -90,9 +99,32 @@ function deleteUser(req, res) {
     });
 }
 
+/*
+    Push notification to a certin channel and event
+    POST /admin/push
+    req.body = {
+        channel: notification channel(optional)
+        event: (optional)
+        mssg: notification message
+    }
+*/
+function pushNotification(req, res) {
+    var channel = req.body.channel || "my-channel";
+    var event = req.body.event || "my-event";
+    var mssg = req.body.mssg;
+    if (!mssg) {
+        res.status(400).send({error: "No message provided"}).end();
+    } else {
+        pusher.trigger(channel, event, {
+            "message": mssg
+        });
+        res.status(200).end();
+    }
+}
 
 module.exports = {
     createUser: createUser,
     updateKey: updateKey,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    pushNotification: pushNotification
 };

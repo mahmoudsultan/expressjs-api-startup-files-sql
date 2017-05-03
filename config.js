@@ -14,6 +14,13 @@ var config = {
                 }
             }
         },
+        pusher: {
+            appId: '335120',
+            key: 'a77c6db33a10e6568489',
+            secret: 'b13414eb5d0f8eb9e0b2',
+            cluster: 'eu',
+            encrypted: true
+        },
         force: true, // forcing sequelizer to drop tables
         port: 8000
     }

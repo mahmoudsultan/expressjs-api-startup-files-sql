@@ -2,7 +2,7 @@ var User = require('../models/main')('users');
 var tokenGenerator = require('../helpers/auth_token');
 const bcrypt = require('bcrypt-nodejs');
 
-// for debuging remove when production
+// TODO: for debuging remove when production
 function index(req, res) {
     User.findAll().then(function (users) {
         res.status(200).send(users).end();
@@ -32,13 +32,17 @@ function show(req, res) {
     })
 }
 
-
+/*
+    This function is called from updateWrapper when the authorization
+    if complete to edit the user
+*/
 // PUT /users/:alias
 function update(req, res) {
     User.update(req.body, {
         where: {
             alias: req.params.alias
         },
+        // permit only the following fields to be updated
         fields: ['alias', 'email', 'collage', 'department', 'name']
     }).then(function (user) {
         if (!user) res.status(404).end();
@@ -51,15 +55,25 @@ function update(req, res) {
     })
 }
 
+/*
+    Checks if the user requesting edit has the authentication
+    key of the user to edit
+    TODO: Add admin edit
+*/
+// PUT /users/:alias
 function updateWrapper(req, res) {
+    // find the user with the auth key
     User.findOne({
         where: {
             token: req.get('Authorization').slice(7)
         }
     }).then(function (editingUser) {
+        // check if the user has the alias of the user 
+        // to edit
         if (editingUser.alias != req.params.alias) {
             res.status(401).end();
         } else {
+            // call update to carry on with the edit
             return update(req, res);
         }
     }).catch(function (err) {
