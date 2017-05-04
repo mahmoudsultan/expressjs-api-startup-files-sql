@@ -52,3 +52,11 @@ ENDPOINTS
             key: the new key
         }
     => updates the user's ticket key.
+
+    POST /admin/push (200)
+        Request body = {
+            channel: (optional)
+            event: (optional)
+            mssg: notifications method
+        }
+    => sends notifcations to channel with the event and mssg

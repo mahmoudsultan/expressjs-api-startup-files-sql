@@ -19,7 +19,9 @@ var config = {
             key: 'a77c6db33a10e6568489',
             secret: 'b13414eb5d0f8eb9e0b2',
             cluster: 'eu',
-            encrypted: true
+            encrypted: true,
+            default_channel: "my-channel",
+            default_event: "my-event"
         },
         force: true, // forcing sequelizer to drop tables
         port: 8000

@@ -73,6 +73,10 @@ app.get('/notification', function(req, res) {
     res.status(200).sendFile(__dirname +"/public/not.html");
 });
 
+app.get('/admin/notify', function(req, res) {
+    res.status(200).sendFile(__dirname + "/public/notifications.html");
+})
+
 app.use('/notify', notificationsRouter);
 
 app.get('*', function (req, res) {

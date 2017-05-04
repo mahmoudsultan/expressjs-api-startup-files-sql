@@ -109,9 +109,10 @@ function deleteUser(req, res) {
     }
 */
 function pushNotification(req, res) {
-    var channel = req.body.channel || "my-channel";
-    var event = req.body.event || "my-event";
+    var channel = req.body.channel || config.pusher.default_channel;
+    var event = req.body.event || config.pusher.default_event;
     var mssg = req.body.mssg;
+    // console.log(req.body.mssg)
     if (!mssg) {
         res.status(400).send({error: "No message provided"}).end();
     } else {
