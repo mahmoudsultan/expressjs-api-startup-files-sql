@@ -104,6 +104,26 @@ describe("Users Routers Test", function () {
             })
     });
 
+    it("should not verify the user if the key is invalid", function (done) {
+        agent.post('/users/verify')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                key: "invalidkey"
+            })
+            .expect(400).end(function (err, res) {
+                if (err) return done(err);
+                User.findOne({
+                    where: {
+                        alias: user.alias
+                    }
+                }).then(function (user) {
+                    (user.activated == true).should.equal(false);
+                    done();
+                }).catch(done);
+            });
+    });
+
+
     it("should verify the user if the key is correct", function (done) {
         agent.post('/users/verify')
             .set('Authorization', 'Bearer ' + token)
