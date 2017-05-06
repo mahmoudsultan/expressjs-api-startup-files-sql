@@ -2,6 +2,14 @@ var User = require('../models/main')('users');
 var tokenGenerator = require('../helpers/auth_token');
 const bcrypt = require('bcrypt-nodejs');
 
+
+// TODO: remove 
+// for debugging purpose only
+function showUser(req, res) {
+    res.send(user).end()
+}
+
+
 // TODO: for debuging remove when production
 function index(req, res) {
     User.findAll().then(function (users) {
@@ -62,23 +70,30 @@ function update(req, res) {
 */
 // PUT /users/:alias
 function updateWrapper(req, res) {
-    // find the user with the auth key
-    User.findOne({
-        where: {
-            token: req.get('Authorization').slice(7)
-        }
-    }).then(function (editingUser) {
-        // check if the user has the alias of the user 
-        // to edit
-        if (editingUser.alias != req.params.alias) {
-            res.status(401).end();
-        } else {
-            // call update to carry on with the edit
-            return update(req, res);
-        }
-    }).catch(function (err) {
-        res.status(500).send({error: err}).end();
-    })
+    if (!req.user || !req.params.alias || req.user.alias != req.params.alias) {
+        res.status(401).end()
+    } else {
+        return update(req, res)
+    }
+}
+
+/*
+    if the key given in the body of the request is the same as the key
+    in the database then the user is activated
+*/
+// POST /verify
+function verify(req, res) {
+    if (req.user.key === req.body.key) {
+        req.user.update({
+            activated: true
+        }).then(function () {
+            res.status(200).end();
+        }).catch(function (err) {
+            res.status(500).send({error: err}).end();
+        })
+    } else {
+        res.status(400).send({error: "Invalid Key"}).end()
+    }
 }
 
 
@@ -157,5 +172,7 @@ module.exports = {
     logout: logout,
     index: index,
     show: show,
-    update: updateWrapper
+    update: updateWrapper,
+    verify: verify,
+    showUser: showUser
 };

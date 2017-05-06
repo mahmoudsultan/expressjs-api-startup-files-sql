@@ -5,7 +5,7 @@ module.exports = function strategySetup(BearerStrategy, next) {
         User.findOne({where :{
             token: token
         }}).then(function(user) {
-            console.log(user);
+            // console.log(user);
             if (!user) {
                 return callback(null, false);
             }

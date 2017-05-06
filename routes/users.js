@@ -13,5 +13,13 @@ router.put('/:alias', passport.authenticate('bearer', {
     session: false
 }), usersController.update);
 
+// verify the user
+router.post('/verify', passport.authenticate('bearer', {
+    session: false
+}), usersController.verify);
+
+router.get('/showuser', passport.authenticate('bearer', {
+    session: false
+}), usersController.showUser);
 
 module.exports = router;
