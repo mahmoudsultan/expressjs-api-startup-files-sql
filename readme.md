@@ -27,6 +27,14 @@ ENDPOINTS
     => if the auth key matches that of the user being updated the fields permitted will be updated with the information given in the request body
     => fileds permitted: alias, name, email, collage, and department.
 
+    POST /users/verify (200)
+        Authorization Header = 'Bearer Auth-key'
+        Request Body = {
+            key: the ticket key
+        }
+    => if the key is the same as the database the activated field in the database of the user will be set to true
+    => if the key is not provided or invalid a 400 will be returned
+    
 **Admin**
 -------
     POST /admin/create/user (201)
@@ -57,6 +65,6 @@ ENDPOINTS
         Request body = {
             channel: (optional)
             event: (optional)
-            mssg: notifications method
+            mssg: notifications message
         }
     => sends notifcations to channel with the event and mssg
