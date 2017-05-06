@@ -17,11 +17,12 @@ describe("Users Routers Test", function () {
             password: '123456789',
             name: 'test_name',
             email: 'test@test.com',
-            token: "test_token"
+            token: "test_token",
+            key: "testkey"
         }).then(function (createdUser) {
             user = createdUser;
-            done()
-        }).catch(done)
+            done();
+        }).catch(done);
     });
 
     it("should return the user when GET /show/:alias", function (done) {
@@ -103,6 +104,25 @@ describe("Users Routers Test", function () {
             })
     });
 
+    it("should verify the user if the key is correct", function (done) {
+        agent.post('/users/verify')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                key: "testkey"
+            })
+            .expect(200).end(function (err, res) {
+                if (err) return done(err);
+                User.findOne({
+                    where: {
+                        alias: user.alias
+                    }
+                }).then(function (user) {
+                    (user.activated == true).should.equal(true);
+                    done();
+                }).catch(done);
+            });
+    });
+
 
 
     // POST /users/logout
@@ -124,6 +144,8 @@ describe("Users Routers Test", function () {
                 }).catch(done);
             });
     });
+
+
 
 
     after(function (done) {
