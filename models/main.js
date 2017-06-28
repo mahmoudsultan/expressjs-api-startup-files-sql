@@ -23,10 +23,13 @@ if (process.env.DATABASE_URL) {
 
 var Movies = connection.import(__dirname + '/movies.js');
 var Users = connection.import(__dirname + '/user.js');
+var Posts = connection.import(__dirname + '/post.js');
 
 // if there's any relations put it here
 Users.hasMany(Movies);
 Movies.belongsTo(Users);
+Users.hasMany(Posts);
+Posts.belongsTo(Users);
 
 
 // setup the array of modules
@@ -34,6 +37,7 @@ var modules = {
     connection: connection,
     movies: Movies,
     users: Users,
+    posts: Posts
 };
 
 module.exports = function(name) {

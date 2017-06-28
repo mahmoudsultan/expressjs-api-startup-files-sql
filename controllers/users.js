@@ -41,9 +41,9 @@ function show(req, res) {
 }
 
 /*
-    This function is called from updateWrapper when the authorization
-    if complete to edit the user
-*/
+ This function is called from updateWrapper when the authorization
+ if complete to edit the user
+ */
 // PUT /users/:alias
 function update(req, res) {
     User.update(req.body, {
@@ -64,10 +64,10 @@ function update(req, res) {
 }
 
 /*
-    Checks if the user requesting edit has the authentication
-    key of the user to edit
-    TODO: Add admin edit
-*/
+ Checks if the user requesting edit has the authentication
+ key of the user to edit
+ TODO: Add admin edit
+ */
 // PUT /users/:alias
 function updateWrapper(req, res) {
     if (!req.user || !req.params.alias || req.user.alias != req.params.alias) {
@@ -78,9 +78,9 @@ function updateWrapper(req, res) {
 }
 
 /*
-    if the key given in the body of the request is the same as the key
-    in the database then the user is activated
-*/
+ if the key given in the body of the request is the same as the key
+ in the database then the user is activated
+ */
 // POST /verify
 function verify(req, res) {
     if (req.user.key === req.body.key) {
@@ -154,7 +154,7 @@ function login(req, res) {
                     res.status(200).send({
                         mssg: "User logged in successfully.. "
                     }).end();
-                }).catch(err => {
+                }).catch(function (err) {
                     throw err
                 });
             });

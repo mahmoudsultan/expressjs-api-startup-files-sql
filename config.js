@@ -1,9 +1,9 @@
 var config = {
     development: {
         database: {
-            name: 'demo-app',
+            name: 'itw',
             username: 'root',
-            password: '',
+            password: 'root1234',
             config: {
                 host: 'localhost',
                 dialect: 'mysql',
