@@ -30,10 +30,18 @@ function show(req, res) {
     })
 }
 
-function post(req,res){
+/*
+    Create new post 
+    POST /posts
+    the request: 
+    {
+        content: post content
+    }
+*/
+function create(req,res){
     var content = req.body.content;
-    var user_id = req.body.user_id;
-    Post.create({content: content, user_id: user_id}).then(function (post) {
+    
+    Post.create({content: content, user_id: req.user.id}).then(function (post) {
         res.status(201).send(post).end();
     }).catch(function (err) {
         res.status(400).send({error: err.message}).end();
@@ -41,8 +49,69 @@ function post(req,res){
 }
 
 
+function update(req, res) {
+    var postId = req.params.id;
+    Post.findOne({
+        where: {
+            id: postId
+        }
+    }).then(function(post) {
+        if (!post) res.status(404).end(); 
+
+        if (post.user_id !== req.user.id) {
+            res.status(304).end();
+        } else {
+            post.update(req.body, {
+                fields: ['content']
+            }).then(function(post) {
+                res.status(200).send(post).end();
+            }).catch(function(err) {
+                // console.log(err);
+                res.status(500).send({
+                    error: err
+                }).end();
+            });
+        }
+    }).catch(function(err) {
+        res.status(500).send({
+            error: err
+        }).end();
+    });
+}
+
+function destroy(req, res) {
+    postId = req.params.id;
+    Post.findOne({
+        where: {
+            id: postId
+        }
+    }).then(function(post) {
+        if (!post) res.status(404).end();
+        if (post.user_id !== req.user.id) {
+            res.status(304).end();
+        } else {
+            // Post.destory({
+            //     where: {
+            //         id: postId
+            //     }
+            // })
+            post.destroy().then(function() {
+                res.status(200).end();
+            }).catch(function(err) {
+                res.status(500).send({
+                    error: err
+                }).end();
+            });
+        }
+    }).catch(function(err) {
+        res.status(500).end();
+    });
+}
+
 module.exports = {
     index: index,
     show: show,
-    post: post
+    post: create,
+    update: update,
+    destroy: destroy
 };
