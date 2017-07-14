@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const envconfig = require('dotenv').config();
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const config = require('./config');
@@ -12,6 +13,7 @@ const strategySetup = require('./helpers/auth_setup');
 const moviesRouter = require('./routes/movies');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
+const postsRouter = require('./routes/posts');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
@@ -55,11 +57,15 @@ app.use(function (req, res, next) {
 
 // Routers setup
 // authentication required for the movies route
-app.use('/movies', passport.authenticate('bearer', {
-    session: false
-}), moviesRouter);
+app.use('/movies',
+    // passport.authenticate('bearer', {
+    // session: false
+// }),
+    moviesRouter);
 
 app.use('/users', usersRouter);
+
+app.use('/posts', postsRouter);
 
 // TODO: important need authentication for the admin route
 app.use('/admin', adminRouter);

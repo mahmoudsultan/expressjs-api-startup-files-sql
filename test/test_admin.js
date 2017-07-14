@@ -12,7 +12,7 @@ describe('Admin routers test for Users functionality', function() {
     // POST /admin/create/user
     it ("Should create new user - return 201 and location of the new user", function (done) {
         user = {
-            alias: "test-alias",
+            alias: "test-alias2",
             name: "some name",
             email: "test@test.com",
             password: "122342342435"
@@ -26,7 +26,7 @@ describe('Admin routers test for Users functionality', function() {
                 res.body.should.not.equal(undefined);
                 
                 User.findOne({where: {
-                    alias: 'test-alias'
+                    alias: 'test-alias2'
                 }}).then(function (user) {
                     res.body.id.should.equal(user.id);
                     test_user = user;

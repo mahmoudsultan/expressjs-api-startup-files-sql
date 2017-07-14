@@ -1,17 +1,16 @@
 {
-  "name": "itw",
+  "name": "demoapp",
   "version": "1.0.0",
   "description": "demo api app using Express, MySQL, Sequilze",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "author": "IEEE AlexSB Software Development Committee",
+  "author": "Mahmoud Sultan",
   "license": "MIT",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
-    "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "mysql": "^2.13.0",
     "passport": "^0.3.2",
