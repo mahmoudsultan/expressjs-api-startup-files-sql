@@ -3,7 +3,7 @@ var config = {
         database: {
             name: 'demo-app',
             username: 'root',
-            password: '',
+            password: process.env.SQL_PASSWORD,
             config: {
                 host: 'localhost',
                 dialect: 'mysql',
