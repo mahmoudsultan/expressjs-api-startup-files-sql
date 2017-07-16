@@ -13,7 +13,7 @@ module.exports = function (sequalize, DataTypes) {
         },
         user_id: {
             type: DataTypes.INTEGER,
-            allowNull:false,
+            // allowNull:false,
             unique:false
         }
     });

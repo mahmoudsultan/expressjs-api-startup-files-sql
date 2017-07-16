@@ -14,24 +14,31 @@ const moviesRouter = require('./routes/movies');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
 const postsRouter = require('./routes/posts');
+const hashtagRouter = require('./routes/hashtags');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
 const User = require('./models/main')('users');
+const Post = require('./models/main')('posts');
 
 // force: true here is only in the development env change in config.js
 connection.sync({
     force: config.force
 }).then(function () {
     console.log('Database created succesfully...');
-    return User.create({
+    User.create({
         alias: "test",
         password: "123456789",
         name: "test",
         email:  "test@test.com"
-    })
-}).then(function (user) {
-    console.log("User created successfully");
+    }).then(function(user) {
+        console.log("User created successfully");
+        Post.create({
+            content: "initial topic",
+        }).then(function(post) {
+            return user.setPosts([post]);
+        })
+    }).catch(console.log)
 }).catch(console.log);
 
 // setup the body parser middelware
@@ -64,8 +71,8 @@ app.use('/movies',
     moviesRouter);
 
 app.use('/users', usersRouter);
-
 app.use('/posts', postsRouter);
+app.use('/hashtags', hashtagRouter);
 
 // TODO: important need authentication for the admin route
 app.use('/admin', adminRouter);
