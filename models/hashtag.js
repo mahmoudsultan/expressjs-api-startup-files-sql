@@ -12,8 +12,12 @@ module.exports = function(sequalize, DataTypes) {
     }, {
         hooks: {
             afterValidate: function (post, options) {
-                user.count = 0;
+                post.count = 0;
             }
+        },
+        name: {
+            singular: "hashtag",
+            plural: "hashtags"
         }
     });
 }

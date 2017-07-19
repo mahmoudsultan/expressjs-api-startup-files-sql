@@ -1,4 +1,8 @@
 var Post = require('../models/main')('posts');
+var each = require('async/each');
+var HashtagController = require('../controllers/hashtag');
+var Hashtag = require('../models/main')('hashtag');
+var User = require('../models/main')('users');
 
 // GET posts/
 function index(req, res) {
@@ -15,6 +19,15 @@ function show(req, res) {
         where: {
             id: req.params.id
         },
+        include: [{
+            model: Hashtag, as: "hashtags"
+        },
+        {
+            model: User,
+            as: "user",
+            attributes: ["id", "alias", "email"]
+        }
+        ],
         attributes: ['id','content','user_id']
     }).then(function (post) {
         if (!post) {
@@ -35,16 +48,24 @@ function show(req, res) {
     POST /posts
     the request: 
     {
-        content: post content
+        content: post content,
+        hashtags: ['','']
     }
 */
 function create(req,res){
     var content = req.body.content;
-    
-    Post.create({content: content, user_id: req.user.id}).then(function (post) {
-        res.status(201).send(post).end();
+    var hashtagsArray = req.body.hashtags;
+
+    Post.create({content: content, user: req.user}).then(function (post) {
+        if (hashtagsArray && hashtagsArray.length > 0 ) {
+            async.each(hashtagsArray, function(title, callback) {
+                HashtagController.createAndLinkToPost(title, post, callback);
+            })
+        } else {
+            res.status(201).send(post).end();
+        }
     }).catch(function (err) {
-        res.status(400).send({error: err.message}).end();
+        res.status(500).send({error: err}).end();
     });
 }
 

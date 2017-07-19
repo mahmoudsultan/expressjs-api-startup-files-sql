@@ -1,67 +1,80 @@
 var Hashtag = require('../models/main')('hashtag');
 var Post = require('../models/main')('posts');
 
-// GET /hashtags    
+var parallel = require('async/parallel');
+
 function index(req, res) {
-    Hashtag.findAll().then(function(hastags) {
+    Hashtag.findAll().then(function (hashtags) {
         res.status(200).send(hashtags).end();
     }).catch(function (err) {
-        res.status(500).send({error: err}).end();
-    });
-}
-
-// GET /hashtag/:id gets the information of a hashtag
-function show(req, res) {
-    Hashtag.findOne({
-        where: {
-            id: req.params.id
-        }
-    }).then(function (hashtag) {
-        if (!hashtag) {
-            res.status(404).end();
-        } else {
-            res.status(200).send(hashtag).end();
-        }
-    }).catch(function (err) {
-        res.status(500).send({
-            error: err
-        }).end();
-    });
-}
-
-/*
-    Create new hashtag 
-    POST /hashtags
-    the request: 
-    {
-        title: hashtag title
-    }
-
-    TODO ×
-*/
-function create(req, res) {
-    var title = req.body.title;
-
-    Hashtag.create({title: title}).then(function(hashtag) {
-        res.status(201).send(hashtag).end();
-    }).catch(function (err) {
-        console.log(err.message);
         res.status(500).send({error: err.message}).end();
     });
 }
 
-
-function createAndLink(title, post, callback) {
+function create(req, res) {
     Hashtag.create({
-        title: title
+        title: req.body.title
     }).then(function (hashtag) {
-
-    })
+        if (!hashtag) res.status(400).end();
+        res.status(201).send(hashtag).end();
+    }).catch(function(err) {
+        res.status(500).send({error: err.message}).end();
+    });
 }
 
+/*
+    GET /hashtag/:title
+    load information of the hashtag and the post with that
+    hashtag
+*/
+function show(req, res) {
+    var title = req.params.title;
+
+    Hashtag.findOne({
+        where: {
+            title: title
+        },
+        include: [{
+            model: Post, as: "posts"
+        }]
+    }).then(function (hashtag) {
+        if (!hashtag) res.status(404).end();
+        res.status(200).send(hashtag).end();
+    }).catch(function (error) {
+        res.status(500).send({error: err.message}).end();
+    });
+}
+
+function createAndLinkToPost(title, post, callbackOut) {
+    Hashtag.findOrCreate({
+        where: {
+            title: title
+        }
+    }).spread(function(hashtag, created) {
+        async.parallel([
+            function(callback) {
+                hashtag.addPost(post).then(() => {
+                callback();
+            })
+        },
+            function(callback) {
+                post.addHashtag(hashtag).then(() => {
+                    callback();
+                })
+            }
+        ], function(err, results) {
+            if (err) {
+                callbackOut(err);
+            } else {
+                callbackOut();
+            }
+        })
+    });
+}
 
 module.exports = {
     index: index,
     show: show,
-    create: create
+    create: create,
+    createAndLinkToPost: createAndLinkToPost
 }

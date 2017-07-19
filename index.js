@@ -20,12 +20,14 @@ const hashtagRouter = require('./routes/hashtags');
 const connection = require('./models/main')('connection');
 const User = require('./models/main')('users');
 const Post = require('./models/main')('posts');
+const Hashtag = require('./models/main')('hashtag');
 
 // force: true here is only in the development env change in config.js
 connection.sync({
     force: config.force
 }).then(function () {
     console.log('Database created succesfully...');
+    // For Testing
     User.create({
         alias: "test",
         password: "123456789",
@@ -36,7 +38,12 @@ connection.sync({
         Post.create({
             content: "initial topic",
         }).then(function(post) {
-            return user.setPosts([post]);
+            Hashtag.create({
+                title: "test",
+            }).then((hashtag) => {
+                hashtag.setPosts([post]);
+                return user.setPosts([post]);
+            });            
         })
     }).catch(console.log)
 }).catch(console.log);
