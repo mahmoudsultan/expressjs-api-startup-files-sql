@@ -12,6 +12,9 @@ router.use(function(req, res, next) {
 // GET /posts/
 router.get('/', postsController.index);
 
+// GET /posts/:page/:limit
+router.get('/:page/:limit', postsController.index);
+
 // GET /posts/:id
 router.get('/:id', postsController.show);
 

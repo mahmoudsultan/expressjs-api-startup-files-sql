@@ -6,7 +6,14 @@ var User = require('../models/main')('users');
 
 // GET posts/
 function index(req, res) {
-    Post.findAll().then(function (posts) {
+    var page = req.params.page || 0;
+    var limit = req.params.limit || 10;
+    var offset = page * limit - 1;
+
+    Post.findAll({
+        offset: offset,
+        limit: limit
+    }).then(function (posts) {
         res.status(200).send(posts).end();
     }).catch(function (err) {
         res.status(500).send(err).end()
@@ -15,6 +22,8 @@ function index(req, res) {
 
 // GET posts/show/:id gets the information of a post
 function show(req, res) {
+
+  
     Post.findOne({
         where: {
             id: req.params.id

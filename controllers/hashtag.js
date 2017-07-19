@@ -4,7 +4,14 @@ var Post = require('../models/main')('posts');
 var parallel = require('async/parallel');
 
 function index(req, res) {
-    Hashtag.findAll().then(function (hashtags) {
+    var page = req.params.page || 0;
+    var limit = req.params.limit || 10;
+    var offset = page * limit - 1;
+
+    Hashtag.findAll({
+        offset: offset,
+        limit: limit
+    }).then(function (hashtags) {
         res.status(200).send(hashtags).end();
     }).catch(function (err) {
         res.status(500).send({error: err.message}).end();

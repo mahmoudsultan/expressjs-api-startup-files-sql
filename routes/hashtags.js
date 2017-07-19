@@ -10,6 +10,8 @@ router.get('/', hashtagController.index);
 //     session: false
 // }), hashtagController.create);
 
+router.get('/:page/:limit', hashtagController.index);
+
 router.post('/', hashtagController.create);
 router.get('/:title', hashtagController.show);
 
