@@ -6,7 +6,7 @@ var parallel = require('async/parallel');
 function index(req, res) {
     var page = req.params.page || 0;
     var limit = req.params.limit || 10;
-    var offset = page * limit - 1;
+    var offset = page * limit;
 
     Hashtag.findAll({
         offset: offset,
@@ -79,9 +79,25 @@ function createAndLinkToPost(title, post, callbackOut) {
     });
 }
 
+function count(req, res) {
+    Hashtag.findOne({
+        where:{
+            title: req.params.title
+        }
+    }).then((hashtag) => {
+        if (!hashtag) res.status(404).end();
+        return hashtag.getPosts().then((posts) => {
+            res.status(200).send({count: posts.length}).end()
+        })
+    }).catch((err) => {
+        res.status(500).send({error: err.message}).end();
+    })
+}
+
 module.exports = {
     index: index,
     show: show,
     create: create,
-    createAndLinkToPost: createAndLinkToPost
+    createAndLinkToPost: createAndLinkToPost,
+    count: count
 }

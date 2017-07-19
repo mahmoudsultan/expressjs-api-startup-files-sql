@@ -13,6 +13,9 @@ router.get('/', hashtagController.index);
 router.get('/:page/:limit', hashtagController.index);
 
 router.post('/', hashtagController.create);
+
+router.get('/:title/posts/count', hashtagController.count);
 router.get('/:title', hashtagController.show);
+
 
 module.exports = router;

@@ -8,7 +8,7 @@ var User = require('../models/main')('users');
 function index(req, res) {
     var page = req.params.page || 0;
     var limit = req.params.limit || 10;
-    var offset = page * limit - 1;
+    var offset = page * limit;
 
     Post.findAll({
         offset: offset,
