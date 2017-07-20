@@ -18,22 +18,22 @@ var show = function (req, res) {
     // }
     Movies.findById(id).then(function (movie) {
         if (movie === null) {
-            res.status(404).send({error: "Movie not found"}).end();
+            res.status(404).send({ error: "Movie not found" }).end();
         } else {
             res.send(movie).end();
         }
     }).catch(function (error) {
-        res.status(400).send({error: error}).end();
+        res.status(400).send({ error: error }).end();
     });
 };
 
 var post = function (req, res) {
     var title = req.body.title;
     var desc = req.body.description;
-    Movies.create({title: title, description: desc}).then(function (movie) {
+    Movies.create({ title: title, description: desc }).then(function (movie) {
         res.status(201).end();
     }).catch(function (err) {
-        res.status(400).send({error: err.message}).end();
+        res.status(400).send({ error: err.message }).end();
     });
 };
 

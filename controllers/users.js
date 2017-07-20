@@ -89,10 +89,10 @@ function verify(req, res) {
         }).then(function () {
             res.status(200).end();
         }).catch(function (err) {
-            res.status(500).send({error: err}).end();
+            res.status(500).send({ error: err }).end();
         })
     } else {
-        res.status(400).send({error: "Invalid Key"}).end()
+        res.status(400).send({ error: "Invalid Key" }).end()
     }
 }
 
@@ -110,17 +110,17 @@ function logout(req, res) {
         User.update({
             token: null
         }, {
-            where: {
-                token: token
-            }
-        }).then(function () {
-            res.status(200).end();
-        }).catch(function (err) {
-            // 500: internal server error
-            res.status(500).send({
-                error: err
-            });
-        })
+                where: {
+                    token: token
+                }
+            }).then(function () {
+                res.status(200).end();
+            }).catch(function (err) {
+                // 500: internal server error
+                res.status(500).send({
+                    error: err
+                });
+            })
     }
 }
 

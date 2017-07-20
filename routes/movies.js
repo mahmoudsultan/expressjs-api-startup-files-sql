@@ -4,7 +4,7 @@ const express = require('express'),
 
 
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     res.setHeader('content-type', 'application/json');
     next();
 });

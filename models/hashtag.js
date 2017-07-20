@@ -1,4 +1,4 @@
-module.exports = function(sequalize, DataTypes) {
+module.exports = function (sequalize, DataTypes) {
     return sequalize.define('hashtags', {
         title: {
             type: DataTypes.STRING,
@@ -10,14 +10,14 @@ module.exports = function(sequalize, DataTypes) {
             allowNull: true
         }
     }, {
-        hooks: {
-            afterValidate: function (post, options) {
-                post.count = 0;
+            hooks: {
+                afterValidate: function (post, options) {
+                    post.count = 0;
+                }
+            },
+            name: {
+                singular: "hashtag",
+                plural: "hashtags"
             }
-        },
-        name: {
-            singular: "hashtag",
-            plural: "hashtags"
-        }
-    });
+        });
 }

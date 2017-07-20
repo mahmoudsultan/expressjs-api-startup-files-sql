@@ -51,12 +51,12 @@ module.exports = function (sequelizer, DataTypes) {
         }
         // TODO Add avatar
     }, {
-        hooks: {
-            afterValidate: function (user, options) {
-                // hash the password after it's validated and before inserting
-                // into the table
-                user.password = bcrypt.hashSync(user.password);
+            hooks: {
+                afterValidate: function (user, options) {
+                    // hash the password after it's validated and before inserting
+                    // into the table
+                    user.password = bcrypt.hashSync(user.password);
+                }
             }
-        }
-    });
+        });
 };

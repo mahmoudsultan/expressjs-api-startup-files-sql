@@ -4,7 +4,7 @@ const express = require('express'),
 const passport = require('passport');
 
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     res.setHeader('content-type', 'application/json');
     next();
 });
@@ -21,7 +21,7 @@ router.get('/:id', postsController.show);
 // POST /posts
 router.post('/', passport.authenticate('bearer', {
     session: false
-}),postsController.post);
+}), postsController.post);
 
 // PUT /posts/:id
 router.put('/:id', passport.authenticate('bearer', {

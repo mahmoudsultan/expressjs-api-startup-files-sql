@@ -14,7 +14,7 @@ function index(req, res) {
     }).then(function (hashtags) {
         res.status(200).send(hashtags).end();
     }).catch(function (err) {
-        res.status(500).send({error: err.message}).end();
+        res.status(500).send({ error: err.message }).end();
     });
 }
 
@@ -24,8 +24,8 @@ function create(req, res) {
     }).then(function (hashtag) {
         if (!hashtag) res.status(400).end();
         res.status(201).send(hashtag).end();
-    }).catch(function(err) {
-        res.status(500).send({error: err.message}).end();
+    }).catch(function (err) {
+        res.status(500).send({ error: err.message }).end();
     });
 }
 
@@ -48,7 +48,7 @@ function show(req, res) {
         if (!hashtag) res.status(404).end();
         res.status(200).send(hashtag).end();
     }).catch(function (error) {
-        res.status(500).send({error: err.message}).end();
+        res.status(500).send({ error: err.message }).end();
     });
 }
 
@@ -57,19 +57,19 @@ function createAndLinkToPost(title, post, callbackOut) {
         where: {
             title: title
         }
-    }).spread(function(hashtag, created) {
+    }).spread(function (hashtag, created) {
         async.parallel([
-            function(callback) {
+            function (callback) {
                 hashtag.addPost(post).then(() => {
-                callback();
-            })
-        },
-            function(callback) {
+                    callback();
+                })
+            },
+            function (callback) {
                 post.addHashtag(hashtag).then(() => {
                     callback();
                 })
             }
-        ], function(err, results) {
+        ], function (err, results) {
             if (err) {
                 callbackOut(err);
             } else {
@@ -81,16 +81,16 @@ function createAndLinkToPost(title, post, callbackOut) {
 
 function count(req, res) {
     Hashtag.findOne({
-        where:{
+        where: {
             title: req.params.title
         }
     }).then((hashtag) => {
         if (!hashtag) res.status(404).end();
         return hashtag.getPosts().then((posts) => {
-            res.status(200).send({count: posts.length}).end()
+            res.status(200).send({ count: posts.length }).end()
         })
     }).catch((err) => {
-        res.status(500).send({error: err.message}).end();
+        res.status(500).send({ error: err.message }).end();
     })
 }
 

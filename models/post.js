@@ -14,7 +14,7 @@ module.exports = function (sequalize, DataTypes) {
         user_id: {
             type: DataTypes.INTEGER,
             // allowNull:false,
-            unique:false
+            unique: false
         }
     });
 };

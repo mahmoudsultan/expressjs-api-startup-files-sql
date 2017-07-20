@@ -23,7 +23,7 @@ function index(req, res) {
 // GET posts/show/:id gets the information of a post
 function show(req, res) {
 
-  
+
     Post.findOne({
         where: {
             id: req.params.id
@@ -37,7 +37,7 @@ function show(req, res) {
             attributes: ["id", "alias", "email"]
         }
         ],
-        attributes: ['id','content','user_id']
+        attributes: ['id', 'content', 'user_id']
     }).then(function (post) {
         if (!post) {
             // user not found send 404
@@ -61,20 +61,20 @@ function show(req, res) {
         hashtags: ['','']
     }
 */
-function create(req,res){
+function create(req, res) {
     var content = req.body.content;
     var hashtagsArray = req.body.hashtags;
 
-    Post.create({content: content, user: req.user}).then(function (post) {
-        if (hashtagsArray && hashtagsArray.length > 0 ) {
-            async.each(hashtagsArray, function(title, callback) {
+    Post.create({ content: content, user_id: req.user.id }).then(function (post) {
+        if (hashtagsArray && hashtagsArray.length > 0) {
+            async.each(hashtagsArray, function (title, callback) {
                 HashtagController.createAndLinkToPost(title, post, callback);
             })
         } else {
             res.status(201).send(post).end();
         }
     }).catch(function (err) {
-        res.status(500).send({error: err}).end();
+        res.status(500).send({ error: err }).end();
     });
 }
 
@@ -85,24 +85,24 @@ function update(req, res) {
         where: {
             id: postId
         }
-    }).then(function(post) {
-        if (!post) res.status(404).end(); 
+    }).then(function (post) {
+        if (!post) res.status(404).end();
 
         if (post.user_id !== req.user.id) {
             res.status(304).end();
         } else {
             post.update(req.body, {
                 fields: ['content']
-            }).then(function(post) {
+            }).then(function (post) {
                 res.status(200).send(post).end();
-            }).catch(function(err) {
+            }).catch(function (err) {
                 // console.log(err);
                 res.status(500).send({
                     error: err
                 }).end();
             });
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(500).send({
             error: err
         }).end();
@@ -115,7 +115,7 @@ function destroy(req, res) {
         where: {
             id: postId
         }
-    }).then(function(post) {
+    }).then(function (post) {
         if (!post) res.status(404).end();
         if (post.user_id !== req.user.id) {
             res.status(304).end();
@@ -125,15 +125,15 @@ function destroy(req, res) {
             //         id: postId
             //     }
             // })
-            post.destroy().then(function() {
+            post.destroy().then(function () {
                 res.status(200).end();
-            }).catch(function(err) {
+            }).catch(function (err) {
                 res.status(500).send({
                     error: err
                 }).end();
             });
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(500).end();
     });
 }

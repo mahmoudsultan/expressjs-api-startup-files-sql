@@ -6,14 +6,14 @@ var agent = supertest.agent('http://localhost:' + port);
 var tokenGenerator = require('../helpers/auth_token');
 
 
-describe("Hashtag CRUD test", function() {
+describe("Hashtag CRUD test", function () {
     var User = require('../models/main')('users');
     var Hashtag = require('../models/main')('hashtag');
     var user = null;
     var token = "test2_token";
     var hashtagG = null;
 
-    before(function(done) {
+    before(function (done) {
         User.create({
             alias: 'hashtag-test',
             password: '123456789',
@@ -28,18 +28,18 @@ describe("Hashtag CRUD test", function() {
         }).catch(done);
     });
 
-    it ("Should create new hashtag when POST /hashtags", function(done) {
+    it("Should create new hashtag when POST /hashtags", function (done) {
         agent.post('/hashtags')
             .set('Authorization', 'Bearer ' + token)
             .send({
                 title: "test"
-            }).expect(201).end(function(err, res) {
+            }).expect(201).end(function (err, res) {
                 if (err) return done(err);
                 Hashtag.findOne({
                     where: {
                         title: "test"
                     }
-                }).then(function(hashtag) {
+                }).then(function (hashtag) {
                     (hashtag == null).should.equal(false);
                     (hashtag.title == "test").should.equal(true);
                     hashtagG = hashtag;
@@ -48,7 +48,7 @@ describe("Hashtag CRUD test", function() {
             });
     });
 
-    it ("Should return all posts when GET /posts", function(done) {
+    it("Should return all posts when GET /posts", function (done) {
         done(); // Bug in the test itself
         agent.get('/posts/')
             .expect('Content-Type', /json/)
@@ -70,7 +70,7 @@ describe("Hashtag CRUD test", function() {
 
 
     after(function (done) {
-        user.destroy().then(function() {
+        user.destroy().then(function () {
             if (hashtagG) hashtagG.destroy().then(done())
         })
     });
