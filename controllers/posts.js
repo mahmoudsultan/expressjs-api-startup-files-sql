@@ -1,8 +1,8 @@
-var Post = require('../models/main')('posts');
+var Post = require('../models/main')('post');
 var each = require('async/each');
-var HashtagController = require('../controllers/hashtag');
+var HashtagController = require('../controllers/hashtags');
 var Hashtag = require('../models/main')('hashtag');
-var User = require('../models/main')('users');
+var User = require('../models/main')('user');
 
 // GET posts/
 function index(req, res) {
@@ -70,6 +70,7 @@ function create(req, res) {
             res.status(201).send(post).end();
         }
     }).catch(function (err) {
+        console.log("\n\n\n" + err + "\n\n\n");
         res.status(500).send({ error: err }).end();
     });
 }

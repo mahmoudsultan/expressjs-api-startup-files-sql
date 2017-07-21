@@ -6,7 +6,7 @@ var agent = supertest.agent('http://localhost:' + port);
 
 
 describe('Admin routers test for Users functionality', function () {
-    var User = require('../models/main')('users');
+    var User = require('../models/main')('user');
     var test_user = null;
 
     // POST /admin/create/user

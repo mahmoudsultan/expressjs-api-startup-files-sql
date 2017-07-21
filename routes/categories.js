@@ -1,6 +1,6 @@
 const express = require('express'),
     router = express.Router(),
-    postsController = require('./../controllers/posts'),
+    categoriesController = require('./../controllers/categories'),
     passport = require('passport');
 
 router.use(function (req, res, next) {
@@ -8,27 +8,20 @@ router.use(function (req, res, next) {
     next();
 });
 
-// GET /posts/
-router.get('/', postsController.index);
+router.get('/', categoriesController.index);
 
-// GET /posts/:page/:limit
-router.get('/:page/:limit', postsController.index);
+router.get('/:id', categoriesController.show);
 
-// GET /posts/:id
-router.get('/:id', postsController.show);
-
-// POST /posts
 router.post('/', passport.authenticate('bearer', {
     session: false
-}), postsController.post);
+}), categoriesController.create);
 
-// PUT /posts/:id
 router.put('/:id', passport.authenticate('bearer', {
     session: false
-}), postsController.update);
+}), categoriesController.update);
 
 router.delete('/:id', passport.authenticate('bearer', {
     session: false
-}), postsController.destroy);
+}), categoriesController.destroy);
 
 module.exports = router;

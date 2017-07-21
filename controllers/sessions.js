@@ -1,62 +1,65 @@
-var Sponsor = require('../models/main')('sponsor');
+var Session = require('../models/main')('Session');
+var Category = require('../model/main')('Category');
 
 
-// GET /sponsors
+// GET /sessions
 var index = function (req, res) {
-    Sponsor.findAll().then(function (Sponsor) {
-        res.status(200).send(Sponsor).end();
+    Session.findAll({
+        include: [{
+            model: Category, as: 'categories'
+        }]
+    }).then(function (sessions) {
+        res.status(200).send(sessions).end();
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });
 };
 
-// GET /sponsors/:id
+// GET /sessions/:id
 var show = function (req, res) {
     var id = req.params.id;
 
-    Sponsor.findById(id).then(function (sponsor) {
-        if (!sponsor) {
-            res.status(404).send({ error: "Sponsor not found" }).end();
+    Session.findById(id).then(function (session) {
+        if (!session) {
+            res.status(404).send({ error: "Session not found" }).end();
         } else {
-            res.send(sponsor).end();
+            res.send(session).end();
         }
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });
 };
 
-// POST /sponsors
+// POST /sessions
 var create = function (req, res) {
-    Sponsor.create({
-        name: req.body.name,
-        link: req.body.link,
-        type: req.body.type
-    }).then(function (sponsor) {
-        res.status(201).send(sponsor).end();
+    Session.create({
+        name: req.body.name
+    }).then(function (session) {
+        res.status(201).send(session).end();
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });
 };
 
-// PUT /sponsors/:id
+// PUT /sessions/:id
 var update = function (req, res) {
-    Sponsor.update(req.body, {
+    Session.update(req.body, {
         where: {
             id: req.params.id
         },
-        fields: ['name', 'link', 'type']
-    }).then(function (sponsor) {
-        if (!sponsor) res.status(404).end();
+        fields: ['name']
+    }).then(function (session) {
+        if (!session) res.status(404).end();
 
-        res.status(200).send(sponsor).end();
+        res.status(200).send(session).end();
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });
 };
 
-// DELETE /sponsors/:id
+// DELETE /sessions/:id
 var destroy = function (req, res) {
-    Sponsor.destroy({
+    Session.destroy({
         where: {
             id: req.params.id
         }

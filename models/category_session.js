@@ -1,16 +1,17 @@
 module.exports = function (sequalize, DataTypes) {
-    return sequalize.define('hashtag_post', {
+    return sequalize.define('category_session', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        tag_id: {
+        category_id: {
             type: DataTypes.INTEGER,
+            references: { model: 'categories', key: 'id' }
         },
-        post_id: {
+        session_id: {
             type: DataTypes.INTEGER,
-            references: null
+            references: { model: 'sessions', key: 'id' }
         }
     });
 }

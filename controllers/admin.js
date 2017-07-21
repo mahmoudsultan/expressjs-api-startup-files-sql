@@ -1,4 +1,4 @@
-var User = require('../models/main')('users');
+var User = require('../models/main')('user');
 var Pusher = require('pusher'),
     config = require('../config');
 

@@ -22,29 +22,36 @@ if (process.env.DATABASE_URL) {
 }
 
 var Movies = connection.import(__dirname + '/movies.js');
-var Users = connection.import(__dirname + '/user.js');
-var Posts = connection.import(__dirname + '/post.js');
-var HashTag = connection.import(__dirname + '/hashtag.js');
-var HashTagPost = connection.import(__dirname + '/hashtagpost.js');
-var Sponsors = connection.import(__dirname + '/sponsor.js');
+var User = connection.import(__dirname + '/user.js');
+var Post = connection.import(__dirname + '/post.js');
+var Hashtag = connection.import(__dirname + '/hashtag.js');
+var HashtagPost = connection.import(__dirname + '/hashtag_post.js');
+var Sponsor = connection.import(__dirname + '/sponsor.js');
+var Category = connection.import(__dirname + '/category.js');
+var Session = connection.import(__dirname + '/session.js');
+var CategorySession = connection.import(__dirname + '/category_session.js');
+
 // if there's any relations put it here
 // Users.hasMany(Movies);
 // Movies.belongsTo(Users);
-Users.hasMany(Posts);
-Posts.belongsTo(Users);
+User.hasMany(Post);
+Post.belongsTo(User);
 
-Posts.belongsToMany(HashTag, {
+Category.belongsToMany(Session, { through: CategorySession, constraints: false });
+Session.belongsToMany(Category, { through: CategorySession, constraints: false });
+
+Post.belongsToMany(Hashtag, {
     through: {
-        model: HashTagPost,
+        model: HashtagPost,
         unique: false
     },
     foreignKey: 'postId',
     constraints: false
 });
 
-HashTag.belongsToMany(Posts, {
+Hashtag.belongsToMany(Post, {
     through: {
-        model: HashTagPost,
+        model: HashtagPost,
         unique: false
     },
     foreignKey: 'tagId',
@@ -55,10 +62,12 @@ HashTag.belongsToMany(Posts, {
 var modules = {
     connection: connection,
     movies: Movies,
-    users: Users,
-    posts: Posts,
-    hashtag: HashTag,
-    sponsors: Sponsors
+    user: User,
+    post: Post,
+    hashtag: Hashtag,
+    sponsor: Sponsor,
+    category: Category,
+    session: Session
 };
 
 module.exports = function (name) {

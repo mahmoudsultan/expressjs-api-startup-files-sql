@@ -1,8 +1,13 @@
 const express = require('express'),
     router = express.Router(),
-    hashtagController = require('../controllers/hashtag');
-const passport = require('passport');
+    hashtagController = require('../controllers/hashtags'),
+    passport = require('passport');
 
+
+router.use(function (req, res, next) {
+    res.setHeader('content-type', 'application/json');
+    next();
+});
 
 router.get('/', hashtagController.index);
 // router.get('/:id', hashtagController.show);

@@ -1,7 +1,12 @@
 const express = require('express'),
     router = express.Router(),
-    usersController = require('../controllers/users');
-const passport = require('passport');
+    usersController = require('../controllers/users'),
+    passport = require('passport');
+
+router.use(function (req, res, next) {
+    res.setHeader('content-type', 'application/json');
+    next();
+});
 
 router.post('/login', usersController.login);
 router.post('/logout', usersController.logout);

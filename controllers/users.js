@@ -1,4 +1,4 @@
-var User = require('../models/main')('users');
+var User = require('../models/main')('user');
 var tokenGenerator = require('../helpers/auth_token');
 const bcrypt = require('bcrypt-nodejs');
 

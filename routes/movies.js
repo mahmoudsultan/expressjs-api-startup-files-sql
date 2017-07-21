@@ -2,8 +2,6 @@ const express = require('express'),
     router = express.Router(),
     moviesController = require('./../controllers/movies');
 
-
-
 router.use(function (req, res, next) {
     res.setHeader('content-type', 'application/json');
     next();

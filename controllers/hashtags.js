@@ -1,5 +1,5 @@
 var Hashtag = require('../models/main')('hashtag');
-var Post = require('../models/main')('posts');
+var Post = require('../models/main')('post');
 
 var parallel = require('async/parallel');
 

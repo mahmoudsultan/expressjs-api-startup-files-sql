@@ -1,6 +1,6 @@
 // movies for now until we setup the database
 
-var Movies = require('./../models/main')('movies')
+var Movies = require('./../models/main')('movies');
 
 var index = function (req, res) {
     var movies = Movies.findAll().then(function (movies) {

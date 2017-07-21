@@ -1,4 +1,4 @@
-const User = require('./../models/main')('users');
+const User = require('./../models/main')('user');
 
 module.exports = function strategySetup(BearerStrategy, next) {
     return new BearerStrategy(function (token, callback) {

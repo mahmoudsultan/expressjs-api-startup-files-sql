@@ -6,7 +6,7 @@ var agent = supertest.agent('http://localhost:' + port);
 var tokenGenerator = require('../helpers/auth_token');
 
 describe("Hashtag CRUD test", function () {
-    var User = require('../models/main')('users');
+    var User = require('../models/main')('user');
     var Hashtag = require('../models/main')('hashtag');
     var user = null;
     var token = "test2_token";
