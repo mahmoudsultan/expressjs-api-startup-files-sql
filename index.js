@@ -15,12 +15,14 @@ const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
 const postsRouter = require('./routes/posts');
 const hashtagRouter = require('./routes/hashtags');
+const sponsorsRouter = require('./routes/sponsors');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
 const User = require('./models/main')('users');
 const Post = require('./models/main')('posts');
 const Hashtag = require('./models/main')('hashtag');
+const Sponsor = require('./models/main')('sponsor');
 
 // force: true here is only in the development env change in config.js
 connection.sync({
@@ -80,6 +82,7 @@ app.use('/movies',
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/hashtags', hashtagRouter);
+app.use('/sponsors', sponsorsRouter);
 
 // TODO: important need authentication for the admin route
 app.use('/admin', adminRouter);

@@ -5,16 +5,16 @@ var port = process.env.PORT || 8000;
 var agent = supertest.agent('http://localhost:' + port);
 var tokenGenerator = require('../helpers/auth_token');
 
-describe("Posts CRUD test", function () {
+describe('Sponsors CRUD test', function () {
     var User = require('../models/main')('users');
-    var Post = require('../models/main')('posts');
-    var user = null;
+    var Sponsors = require('../models/main')('sponsors');
     var token = "test2_token";
-    var postG = null;
+    var user = null;
+    var sponsor_unique = null;
 
     before(function (done) {
         User.create({
-            alias: 'post-test',
+            alias: 'sponsor-test',
             password: '123456789',
             name: 'test_name',
             email: 'testpost@test.com',
@@ -25,90 +25,89 @@ describe("Posts CRUD test", function () {
             token = token || user.token;
             done();
         }).catch(done);
-    })
+    });
 
-    it("Should create new post when POST /posts", function (done) {
-        agent.post('/posts')
+    it('Should create new sponsor when POST /sponsors', function (done) {
+        agent.post('/sponsors')
             .set('Authorization', 'Bearer ' + token)
             .send({
-                content: "post content test",
+                name: 'Vodafone',
+                link: 'http://www.vodafone.com.eg/',
+                type: 'Gold'
             }).expect(201).end(function (err, res) {
                 if (err) return done(err);
-                Post.findOne({
+
+                Sponsors.findOne({
                     where: {
-                        user_id: user.id
+                        name: 'Vodafone'
                     }
-                }).then(function (post) {
-                    (post == null).should.equal(false);
-                    (post.content == "post content test").should.equal(true);
-                    postG = post;
+                }).then(function (sponsor) {
+                    (sponsor == null).should.equal(false);
+                    (sponsor.type == 'Gold').should.equal(true);
+                    sponsor_unique = sponsor;
                     done();
-                }).catch(done);
+                }).catch(done)
             });
     });
 
-    it("Should return all posts when GET /posts", function (done) {
-        agent.get('/posts/')
+    it('Should return all sponsors when GET /sponsors', function (done) {
+        agent.get('/sponsors')
+            .set('Authorization', 'Bearer ' + token)
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
-                found = false;
+                var found = false;
+
                 res.body.forEach((item, index) => {
-                    if (item.content.includes("test")) {
+                    if (item.name === 'Vodafone') {
                         found = true;
                     }
-                })
+                });
+
                 found.should.equal(true);
-                // console.log(res.body);
                 done();
-            })
+            });
     });
 
-    it("Should update the post if the user_id is valid", function (done) {
-        agent.put('/posts/' + postG.id)
+    it('Should update the sponsor when PUT /sponsors', function (done) {
+        agent.put('/sponsors/' + sponsor_unique.id)
             .set('Authorization', 'Bearer ' + token)
-            .send({ content: "new test content" })
+            .send({ name: 'Voda' })
             .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
-                Post.findOne({
+                Sponsors.findOne({
                     where: {
-                        id: postG.id
+                        id: sponsor_unique.id
                     }
-                }).then(function (post) {
-                    post.content.should.equal("new test content");
+                }).then(function (sponsor) {
+                    sponsor.name.should.equal('Voda');
                     done();
                 }).catch(done);
             });
     });
 
-    it("Should not update the post if the user is not the owner", function (done) {
-        // TODO
-        done();
-    })
-
-    it("Should delete post if user is owner", function (done) {
-        agent.delete("/posts/" + postG.id)
+    it('Should delete sponsor when DELETE /sponsors', function (done) {
+        agent.delete("/sponsors/" + sponsor_unique.id)
             .set('Authorization', 'Bearer ' + token)
             .expect(200)
             .end(function (err, res) {
                 if (err) done(err);
-                Post.findOne({
+                Sponsors.findOne({
                     where: {
-                        id: postG.id
+                        id: sponsor_unique.id
                     }
-                }).then(function (post) {
-                    (post == null).should.equal(true);
+                }).then(function (sponsor) {
+                    (sponsor == null).should.equal(true);
                     done();
                 }).catch(done);
             });
     });
 
-
     after(function (done) {
         user.destroy().then(function () {
-            if (postG) postG.destroy().then(done());
+            if (sponsor_unique) sponsor_unique.destroy().then(done());
         });
     });
 });

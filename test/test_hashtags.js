@@ -5,7 +5,6 @@ var port = process.env.PORT || 8000;
 var agent = supertest.agent('http://localhost:' + port);
 var tokenGenerator = require('../helpers/auth_token');
 
-
 describe("Hashtag CRUD test", function () {
     var User = require('../models/main')('users');
     var Hashtag = require('../models/main')('hashtag');

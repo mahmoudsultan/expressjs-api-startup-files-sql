@@ -22,8 +22,6 @@ function index(req, res) {
 
 // GET posts/show/:id gets the information of a post
 function show(req, res) {
-
-
     Post.findOne({
         where: {
             id: req.params.id
@@ -46,9 +44,7 @@ function show(req, res) {
             res.status(200).send(post).end();
         }
     }).catch(function (err) {
-        res.status(500).send({
-            error: err
-        }).end();
+        res.status(500).send({ error: err }).end();
     })
 }
 
@@ -97,15 +93,11 @@ function update(req, res) {
                 res.status(200).send(post).end();
             }).catch(function (err) {
                 // console.log(err);
-                res.status(500).send({
-                    error: err
-                }).end();
+                res.status(500).send({ error: err }).end();
             });
         }
     }).catch(function (err) {
-        res.status(500).send({
-            error: err
-        }).end();
+        res.status(500).send({ error: err }).end();
     });
 }
 
@@ -128,13 +120,11 @@ function destroy(req, res) {
             post.destroy().then(function () {
                 res.status(200).end();
             }).catch(function (err) {
-                res.status(500).send({
-                    error: err
-                }).end();
+                res.status(500).send({ error: err }).end();
             });
         }
     }).catch(function (err) {
-        res.status(500).end();
+        res.status(500).send({ error: err }).end();
     });
 }
 

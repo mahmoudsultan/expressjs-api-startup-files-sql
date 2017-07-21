@@ -25,7 +25,8 @@ var Movies = connection.import(__dirname + '/movies.js');
 var Users = connection.import(__dirname + '/user.js');
 var Posts = connection.import(__dirname + '/post.js');
 var HashTag = connection.import(__dirname + '/hashtag.js');
-var HashTagPost = connection.import(__dirname + '/hashtagpost.js')
+var HashTagPost = connection.import(__dirname + '/hashtagpost.js');
+var Sponsors = connection.import(__dirname + '/sponsor.js');
 // if there's any relations put it here
 // Users.hasMany(Movies);
 // Movies.belongsTo(Users);
@@ -56,7 +57,8 @@ var modules = {
     movies: Movies,
     users: Users,
     posts: Posts,
-    hashtag: HashTag
+    hashtag: HashTag,
+    sponsors: Sponsors
 };
 
 module.exports = function (name) {
