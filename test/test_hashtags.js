@@ -48,8 +48,7 @@ describe("Hashtag CRUD test", function () {
     });
 
     it("Should return all posts when GET /posts", function (done) {
-        done(); // Bug in the test itself
-        agent.get('/posts/')
+        agent.get('/hashtags/')
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -70,7 +69,7 @@ describe("Hashtag CRUD test", function () {
 
     after(function (done) {
         user.destroy().then(function () {
-            if (hashtagG) hashtagG.destroy().then(done())
+            if (hashtagG) hashtagG.destroy().then(done());
         })
     });
 

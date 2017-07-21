@@ -46,7 +46,7 @@ describe('Sponsors CRUD test', function () {
                     (sponsor.type == 'Gold').should.equal(true);
                     sponsor_unique = sponsor;
                     done();
-                }).catch(done)
+                }).catch(done);
             });
     });
 

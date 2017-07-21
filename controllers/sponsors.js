@@ -31,8 +31,8 @@ var create = function (req, res) {
         name: req.body.name,
         link: req.body.link,
         type: req.body.type
-    }).then(function (movie) {
-        res.status(201).send(movie).end();
+    }).then(function (sponsor) {
+        res.status(201).send(sponsor).end();
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });

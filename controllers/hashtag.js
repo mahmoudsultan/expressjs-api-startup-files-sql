@@ -14,7 +14,7 @@ function index(req, res) {
     }).then(function (hashtags) {
         res.status(200).send(hashtags).end();
     }).catch(function (err) {
-        res.status(500).send({ error: err.message }).end();
+        res.status(400).send({ error: err.message }).end();
     });
 }
 
@@ -22,10 +22,9 @@ function create(req, res) {
     Hashtag.create({
         title: req.body.title
     }).then(function (hashtag) {
-        if (!hashtag) res.status(400).end();
         res.status(201).send(hashtag).end();
     }).catch(function (err) {
-        res.status(500).send({ error: err.message }).end();
+        res.status(400).send({ error: err.message }).end();
     });
 }
 
