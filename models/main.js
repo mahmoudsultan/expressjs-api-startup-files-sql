@@ -67,7 +67,8 @@ var modules = {
     hashtag: Hashtag,
     sponsor: Sponsor,
     category: Category,
-    session: Session
+    session: Session,
+    catses: CategorySession
 };
 
 module.exports = function (name) {

@@ -3,7 +3,6 @@ const express = require('express'),
     hashtagController = require('../controllers/hashtags'),
     passport = require('passport');
 
-
 router.use(function (req, res, next) {
     res.setHeader('content-type', 'application/json');
     next();

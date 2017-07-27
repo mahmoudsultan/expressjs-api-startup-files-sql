@@ -16,7 +16,8 @@ const adminRouter = require('./routes/admin');
 const postsRouter = require('./routes/posts');
 const hashtagRouter = require('./routes/hashtags');
 const sponsorsRouter = require('./routes/sponsors');
-const categoriesController = require('./routes/categories');
+const categoriesRouter = require('./routes/categories');
+const sessionsRouter = require('./routes/sessions')
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
@@ -25,6 +26,7 @@ const Post = require('./models/main')('post');
 const Hashtag = require('./models/main')('hashtag');
 const Sponsor = require('./models/main')('sponsor');
 const Category = require('./models/main')('category');
+const Session = require('./models/main')('session');
 
 // force: true here is only in the development env change in config.js
 connection.sync({
@@ -85,7 +87,8 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/hashtags', hashtagRouter);
 app.use('/sponsors', sponsorsRouter);
-app.use('/categories', categoriesController);
+app.use('/categories', categoriesRouter);
+app.use('/sessions', sessionsRouter);
 
 // TODO: important need authentication for the admin route
 app.use('/admin', adminRouter);

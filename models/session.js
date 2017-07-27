@@ -6,10 +6,7 @@ module.exports = function (sequalize, DataTypes) {
         },
         end: {
             type: DataTypes.TIME,
-            allowNull: false,
-            // validates: {
-                // isAfter: start
-            // }
+            allowNull: false
         },
         day: {
             type: DataTypes.DATEONLY,
@@ -30,6 +27,11 @@ module.exports = function (sequalize, DataTypes) {
         report_link: {
             type: DataTypes.STRING
         }
-        // add after hook to validate
-    });
+    }, {
+            hooks: {
+                afterValidate: function (session, options) {
+                    session.end > session.start
+                }
+            }
+        });
 };

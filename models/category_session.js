@@ -4,14 +4,14 @@ module.exports = function (sequalize, DataTypes) {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
-        },
-        category_id: {
-            type: DataTypes.INTEGER,
-            references: { model: 'categories', key: 'id' }
-        },
-        session_id: {
-            type: DataTypes.INTEGER,
-            references: { model: 'sessions', key: 'id' }
         }
+        // category_id: {
+        // type: DataTypes.INTEGER,
+        // references: { model: 'categories', key: 'id' }
+        // },
+        // session_id: {
+        // type: DataTypes.INTEGER,
+        // references: { model: 'sessions', key: 'id' }
+        // }
     });
 }

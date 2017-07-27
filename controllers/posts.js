@@ -70,7 +70,6 @@ function create(req, res) {
             res.status(201).send(post).end();
         }
     }).catch(function (err) {
-        console.log("\n\n\n" + err + "\n\n\n");
         res.status(500).send({ error: err }).end();
     });
 }
@@ -93,7 +92,6 @@ function update(req, res) {
             }).then(function (post) {
                 res.status(200).send(post).end();
             }).catch(function (err) {
-                // console.log(err);
                 res.status(500).send({ error: err }).end();
             });
         }
