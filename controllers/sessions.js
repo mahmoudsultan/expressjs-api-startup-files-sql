@@ -1,12 +1,15 @@
 var Session = require('../models/main')('session');
 var Category = require('../models/main')('category');
-
+var Speaker = require('../models/main')('speaker');
 
 // GET /sessions
 var index = function (req, res) {
     Session.findAll({
         include: [{
             model: Category, as: 'categories'
+        },
+        {
+            model: Speaker, as: "speakers"
         }]
     }).then(function (sessions) {
         res.status(200).send(sessions).end();
@@ -23,6 +26,9 @@ var show = function (req, res) {
         },
         include: [{
             model: Category, as: 'categories'
+        },
+        {
+            model: Speaker, as: "speakers"
         }]
     }).then(function (session) {
         if (!session) {

@@ -31,7 +31,7 @@ var Category = connection.import(__dirname + '/category.js');
 var Session = connection.import(__dirname + '/session.js');
 var CategorySession = connection.import(__dirname + '/category_session.js');
 var Speaker = connection.import(__dirname + '/speaker.js');
-
+var SessionSpeaker = connection.import(__dirname + '/session_speaker.js');
 
 // if there's any relations put it here
 // Users.hasMany(Movies);
@@ -57,6 +57,26 @@ Hashtag.belongsToMany(Post, {
         unique: false
     },
     foreignKey: 'tagId',
+    constraints: false
+});
+
+
+
+Session.belongsToMany(Speaker, {
+    through: {
+        model: SessionSpeaker,
+        unique: false
+    },
+    foreignKey: 'sessionId',
+    constraints: false
+});
+
+Speaker.belongsToMany(Session, {
+    through: {
+        model: SessionSpeaker,
+        unique: false
+    },
+    foreignKey: 'speakerId',
     constraints: false
 });
 
