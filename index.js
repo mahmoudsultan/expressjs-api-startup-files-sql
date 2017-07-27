@@ -18,6 +18,7 @@ const hashtagRouter = require('./routes/hashtags');
 const sponsorsRouter = require('./routes/sponsors');
 const categoriesRouter = require('./routes/categories');
 const sessionsRouter = require('./routes/sessions')
+const speakersRouter = require('./routes/speakers');
 
 /* Database and models setup */
 const connection = require('./models/main')('connection');
@@ -89,6 +90,7 @@ app.use('/hashtags', hashtagRouter);
 app.use('/sponsors', sponsorsRouter);
 app.use('/categories', categoriesRouter);
 app.use('/sessions', sessionsRouter);
+app.use('/speakers', speakersRouter);
 
 // TODO: important need authentication for the admin route
 app.use('/admin', adminRouter);

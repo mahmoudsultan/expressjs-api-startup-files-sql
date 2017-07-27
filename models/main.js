@@ -30,6 +30,8 @@ var Sponsor = connection.import(__dirname + '/sponsor.js');
 var Category = connection.import(__dirname + '/category.js');
 var Session = connection.import(__dirname + '/session.js');
 var CategorySession = connection.import(__dirname + '/category_session.js');
+var Speaker = connection.import(__dirname + '/speaker.js');
+
 
 // if there's any relations put it here
 // Users.hasMany(Movies);
@@ -68,7 +70,8 @@ var modules = {
     sponsor: Sponsor,
     category: Category,
     session: Session,
-    catses: CategorySession
+    catses: CategorySession,
+    speaker: Speaker
 };
 
 module.exports = function (name) {
