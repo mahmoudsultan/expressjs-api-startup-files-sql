@@ -70,6 +70,7 @@ describe("Hashtag CRUD test", function () {
     after(function (done) {
         user.destroy().then(function () {
             if (hashtagG) hashtagG.destroy().then(done());
+            done();
         })
     });
 

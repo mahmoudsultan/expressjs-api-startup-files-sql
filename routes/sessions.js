@@ -15,9 +15,10 @@ router.get('/', sessionsController.index);
 router.get('/:id', sessionsController.show);
 
 // POST /sessions
-router.post('/', passport.authenticate('bearer', {
-    session: false
-}), sessionsController.create);
+router.post('/', sessionsController.create);
+// router.post('/', passport.authenticate('bearer', {
+//     session: false
+// }), sessionsController.create);
 
 // PUT /sessions/:id
 router.put('/:id', passport.authenticate('bearer', {
