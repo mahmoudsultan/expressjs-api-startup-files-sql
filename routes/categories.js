@@ -8,18 +8,23 @@ router.use(function (req, res, next) {
     next();
 });
 
+// GET /categories
 router.get('/', categoriesController.index);
 
+// GET /categories/:id
 router.get('/:id', categoriesController.show);
 
+// POST /categories
 router.post('/', passport.authenticate('bearer', {
     session: false
 }), categoriesController.create);
 
+// PUT /categories/:id
 router.put('/:id', passport.authenticate('bearer', {
     session: false
 }), categoriesController.update);
 
+// DELETE /categories/:id
 router.delete('/:id', passport.authenticate('bearer', {
     session: false
 }), categoriesController.destroy);

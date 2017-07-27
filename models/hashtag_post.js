@@ -4,14 +4,9 @@ module.exports = function (sequalize, DataTypes) {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
-        },
-        // tag_id: {
-            // type: DataTypes.INTEGER,
-            // references: { model: 'hashtags', key: 'id' }
-        // },
-        // post_id: {
-            // type: DataTypes.INTEGER,
-            // references: { model: 'posts', key: 'id' }
-        // }
-    });
+        }
+    }, {
+            timestamps: false
+        }
+    );
 }

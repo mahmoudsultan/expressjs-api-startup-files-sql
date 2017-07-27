@@ -42,43 +42,11 @@ Post.belongsTo(User);
 Category.belongsToMany(Session, { through: CategorySession, constraints: false });
 Session.belongsToMany(Category, { through: CategorySession, constraints: false });
 
-Post.belongsToMany(Hashtag, {
-    through: {
-        model: HashtagPost,
-        unique: false
-    },
-    foreignKey: 'postId',
-    constraints: false
-});
+Post.belongsToMany(Hashtag, { through: HashtagPost, constraints: false });
+Hashtag.belongsToMany(Post, { through: HashtagPost, constraints: false });
 
-Hashtag.belongsToMany(Post, {
-    through: {
-        model: HashtagPost,
-        unique: false
-    },
-    foreignKey: 'tagId',
-    constraints: false
-});
-
-
-
-Session.belongsToMany(Speaker, {
-    through: {
-        model: SessionSpeaker,
-        unique: false
-    },
-    foreignKey: 'sessionId',
-    constraints: false
-});
-
-Speaker.belongsToMany(Session, {
-    through: {
-        model: SessionSpeaker,
-        unique: false
-    },
-    foreignKey: 'speakerId',
-    constraints: false
-});
+Session.belongsToMany(Speaker, { through: SessionSpeaker, constraints: false });
+Speaker.belongsToMany(Session, { through: SessionSpeaker, constraints: false });
 
 // setup the array of modules
 var modules = {
@@ -90,7 +58,6 @@ var modules = {
     sponsor: Sponsor,
     category: Category,
     session: Session,
-    catses: CategorySession,
     speaker: Speaker
 };
 

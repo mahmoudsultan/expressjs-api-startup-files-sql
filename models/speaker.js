@@ -2,8 +2,7 @@ module.exports = function (sequalize, DataTypes) {
     return sequalize.define('speakers', {
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         email: {
             type: DataTypes.STRING,

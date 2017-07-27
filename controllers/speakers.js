@@ -4,10 +4,10 @@ var parallel = require('async/parallel');
 
 // GET /speakers
 var index = function (req, res) {
-    
+
     var page = req.params.page || 0;
     var limit = req.params.limit || 10;
-    var offset = page * limit;    
+    var offset = page * limit;
 
     Speaker.findAll({
         offset: offset,
@@ -21,11 +21,8 @@ var index = function (req, res) {
 
 // GET /speakers/:id
 var show = function (req, res) {
- 
-    var id = req.params.id;
-
     Speaker.findOne({
-        where: {id: id},
+        where: { id: req.params.id },
         include: [{
             model: Session, as: "sessions",
             attributes: ["id", "name", "type"]
@@ -83,65 +80,65 @@ var destroy = function (req, res) {
 
 
 // POST /speaker/:id/add/session/:sid
-var addSession = function(req, res) {
+var addSession = function (req, res) {
     parallel([(callback) => {
         Speaker.findById(req.params.id).then((speaker) => {
-            if (!speaker) { 
+            if (!speaker) {
                 callback("Speaker not found", null);
-                res.status(404);    
+                res.status(404);
             }
             callback(null, speaker);
         }).catch((err) => callback(err, null));
     }, (callback) => {
         Session.findById(req.params.sid).then((session) => {
-            if (!session) { 
+            if (!session) {
                 res.status(404);
                 callback("Session not found", null);
             }
             callback(null, session);
         }).catch((err) => callback(err, null));
-    }], function(err, results) {
-        if (err) res.send({error: err}).end();
+    }], function (err, results) {
+        if (err) res.send({ error: err }).end();
         var speaker = results[0];
         var session = results[1];
         speaker.addSession(session).then(() => {
             res.status(200).end();
         }).catch((err) => {
-            res.status(500).send({error: err}).end();
+            res.status(500).send({ error: err }).end();
         });
     })
-}
+};
 
 
 // POST /speaker/:id/remove/session/:sid
-var removeSession = function(req, res) {
+var removeSession = function (req, res) {
     parallel([(callback) => {
         Speaker.findById(req.params.id).then((speaker) => {
-            if (!speaker) { 
+            if (!speaker) {
                 callback("Speaker not found", null);
-                res.status(404);    
+                res.status(404);
             }
             callback(null, speaker);
         }).catch((err) => callback(err, null));
     }, (callback) => {
         Session.findById(req.params.sid).then((session) => {
-            if (!session) { 
+            if (!session) {
                 res.status(404);
                 callback("Session not found", null);
             }
             callback(null, session);
         }).catch((err) => callback(err, null));
-    }], function(err, results) {
-        if (err) res.send({error: err}).end();
+    }], function (err, results) {
+        if (err) res.send({ error: err }).end();
         var speaker = results[0];
         var session = results[1];
         speaker.removeSession(session).then(() => {
             res.status(200).end();
         }).catch((err) => {
-            res.status(500).send({error: err}).end();
+            res.status(500).send({ error: err }).end();
         });
     })
-}
+};
 
 
 module.exports = {

@@ -8,20 +8,23 @@ router.use(function (req, res, next) {
     next();
 });
 
+// GET /sessions
 router.get('/', sessionsController.index);
 
+// GET /sessions/:id
 router.get('/:id', sessionsController.show);
 
-router.post('/', sessionsController.create);
+// POST /sessions
+router.post('/', passport.authenticate('bearer', {
+    session: false
+}), sessionsController.create);
 
-// router.post('/', passport.authenticate('bearer', {
-    // session: false
-// }), sessionsController.create);
-
+// PUT /sessions/:id
 router.put('/:id', passport.authenticate('bearer', {
     session: false
 }), sessionsController.update);
 
+// DELETE /sessions/:id
 router.delete('/:id', passport.authenticate('bearer', {
     session: false
 }), sessionsController.destroy);

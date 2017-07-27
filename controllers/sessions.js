@@ -4,7 +4,14 @@ var Speaker = require('../models/main')('speaker');
 
 // GET /sessions
 var index = function (req, res) {
+
+    var page = req.params.page || 0;
+    var limit = req.params.limit || 10;
+    var offset = page * limit;
+
     Session.findAll({
+        offset: offset,
+        limit: limit,
         include: [{
             model: Category, as: 'categories'
         },
@@ -54,27 +61,15 @@ var create = function (req, res) {
         available: req.body.type == "lecture" ? true : req.body.available,
         report_link: req.body.req_link ? req.body.req_link : ''
     }).then(function (session) {
-        console.log("\n\n\n" + JSON.stringify(session) + "\n\n\n");
         // insert categories
         var categories = req.body.categories;
-
-        categories.forEach((category_id, index) => {
-            Category.findById(category_id).then(function (category) {
-                session.addCategory(category.id).then(function (addedCategory) {
-                    console.log("\n\n\n" + JSON.stringify(addedCategory, null, 2) + "\n\n\n");
-                }).catch(function (err) {
-                    console.log("\n\n\n" + JSON.stringify(err, null, 2) + "\n\n\n");
-                    res.status(400).send({ error: err }).end();
-                });
-            }).catch(function (err) {
-                res.status(400).send({ error: err }).end();
-            });
+        session.setCategories(categories).then(function () {
+            session.categories = categories;
+            res.status(201).send(session).end();
+        }).catch(function (err) {
+            res.status(400).send({ error: err }).end();
         });
-
-        // session.setCategories([categories]);
-        res.status(201).send(session).end();
     }).catch(function (err) {
-        console.log("\n\n\n\n" + err + "\n\n\n\n");
         res.status(400).send({ error: err }).end();
     });
 };
@@ -86,11 +81,22 @@ var update = function (req, res) {
             id: req.params.id
         },
         fields: ['name', 'start', 'end', 'day', 'type',
-            'available', 'report_link', 'categories']
+            'available', 'report_link']
     }).then(function (session) {
         if (!session) res.status(404).end();
 
-        res.status(200).send(session).end();
+        var categories = req.body.categories;
+        if (categories) {
+            Session.findById(req.params.id).then(function (session) {
+                session.setCategories(categories).then(function () {
+                    res.status(200).send(session).end();
+                }).catch(function (err) {
+                    res.status(400).send({ error: err }).end();
+                });
+            });
+        } else {
+            res.status(200).send(session).end();
+        }
     }).catch(function (err) {
         res.status(400).send({ error: err }).end();
     });

@@ -30,7 +30,7 @@ module.exports = function (sequalize, DataTypes) {
     }, {
             hooks: {
                 afterValidate: function (session, options) {
-                    session.end > session.start
+                    session.end > session.start;
                 }
             }
         });
