@@ -1,6 +1,6 @@
 const express = require('express'),
     router = express.Router(),
-    postsController = require('./../controllers/posts'),
+    sponsorsController = require('./../controllers/sponsors'),
     passport = require('passport');
 
 router.use(function (req, res, next) {
@@ -8,27 +8,25 @@ router.use(function (req, res, next) {
     next();
 });
 
-// GET /posts/
-router.get('/', postsController.index);
+// GET /sponsors
+router.get('/', sponsorsController.index);
 
-// GET /posts/:page/:limit
-router.get('/:page/:limit', postsController.index);
+// GET /sponsors/:id
+router.get('/:id', sponsorsController.show);
 
-// GET /posts/:id
-router.get('/:id', postsController.show);
-
-// POST /posts
+// POST /sponsors
 router.post('/', passport.authenticate('bearer', {
     session: false
-}), postsController.post);
+}), sponsorsController.create);
 
-// PUT /posts/:id
+// PUT /sponsors/:id
 router.put('/:id', passport.authenticate('bearer', {
     session: false
-}), postsController.update);
+}), sponsorsController.update);
 
+// DELETE /sponsors/:id
 router.delete('/:id', passport.authenticate('bearer', {
     session: false
-}), postsController.destroy);
+}), sponsorsController.destroy);
 
 module.exports = router;

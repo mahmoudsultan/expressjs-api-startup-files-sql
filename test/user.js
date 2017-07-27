@@ -7,7 +7,7 @@ var tokenGenerator = require('../helpers/auth_token');
 
 describe("Users Routers Test", function () {
 
-    var User = require('../models/main')('users');
+    var User = require('../models/main')('user');
     var user = null;
     var token = null;
 

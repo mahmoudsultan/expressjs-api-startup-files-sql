@@ -9,7 +9,7 @@ describe("Movies Routers Test ", function () {
 
     var connection = require('../models/main')('connection');
     var Movie = require('../models/main')('movies');
-    var User = require('../models/main')('users');
+    var User = require('../models/main')('user');
     var user = null;
 
     describe("GET Request", (done) => {

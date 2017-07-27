@@ -5,14 +5,14 @@ var port = process.env.PORT || 8000;
 var agent = supertest.agent('http://localhost:' + port);
 var tokenGenerator = require('../helpers/auth_token');
 
-describe("Posts CRUD test", function() {
-    var User = require('../models/main')('users');
-    var Post = require('../models/main')('posts');
+describe("Posts CRUD test", function () {
+    var User = require('../models/main')('user');
+    var Post = require('../models/main')('post');
     var user = null;
     var token = "test2_token";
     var postG = null;
 
-    before(function(done) {
+    before(function (done) {
         User.create({
             alias: 'post-test',
             password: '123456789',
@@ -27,18 +27,18 @@ describe("Posts CRUD test", function() {
         }).catch(done);
     })
 
-    it ("Should create new post when POST /posts", function(done) {
+    it("Should create new post when POST /posts", function (done) {
         agent.post('/posts')
             .set('Authorization', 'Bearer ' + token)
             .send({
                 content: "post content test",
-            }).expect(201).end(function(err, res) {
+            }).expect(201).end(function (err, res) {
                 if (err) return done(err);
                 Post.findOne({
                     where: {
                         user_id: user.id
                     }
-                }).then(function(post) {
+                }).then(function (post) {
                     (post == null).should.equal(false);
                     (post.content == "post content test").should.equal(true);
                     postG = post;
@@ -47,7 +47,7 @@ describe("Posts CRUD test", function() {
             });
     });
 
-    it ("Should return all posts when GET /posts", function(done) {
+    it("Should return all posts when GET /posts", function (done) {
         agent.get('/posts/')
             .expect('Content-Type', /json/)
             .expect(200)
@@ -65,10 +65,10 @@ describe("Posts CRUD test", function() {
             })
     });
 
-    it ("Should update the post if the user_id is valid", function(done) {
-        agent.put('/posts/'+postG.id)
+    it("Should update the post if the user_id is valid", function (done) {
+        agent.put('/posts/' + postG.id)
             .set('Authorization', 'Bearer ' + token)
-            .send({content: "new test content"})
+            .send({ content: "new test content" })
             .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
@@ -76,30 +76,29 @@ describe("Posts CRUD test", function() {
                     where: {
                         id: postG.id
                     }
-                }).then(function(post) {
+                }).then(function (post) {
                     post.content.should.equal("new test content");
                     done();
                 }).catch(done);
             });
     });
 
-    it ("Should not update the post if the user is not the owner", function(done) {
+    it("Should not update the post if the user is not the owner", function (done) {
         // TODO
         done();
     })
 
-    it ("Should delete post if user is owner", function(done) {
+    it("Should delete post if user is owner", function (done) {
         agent.delete("/posts/" + postG.id)
             .set('Authorization', 'Bearer ' + token)
             .expect(200)
-            .end(function(err, res) {
+            .end(function (err, res) {
                 if (err) done(err);
                 Post.findOne({
                     where: {
                         id: postG.id
                     }
-                }).then(function(post) {
-                    console.log(post);
+                }).then(function (post) {
                     (post == null).should.equal(true);
                     done();
                 }).catch(done);
@@ -108,9 +107,8 @@ describe("Posts CRUD test", function() {
 
 
     after(function (done) {
-        user.destroy().then(function() {
+        user.destroy().then(function () {
             if (postG) postG.destroy().then(done());
         });
     });
-
 });
