@@ -52,6 +52,7 @@ var show = function (req, res) {
 var create = function (req, res) {
     // type: "lecture", "workshop"
     // if lecture then available by default
+    console.log(req.body);
     Session.create({
         name: req.body.name,
         start: req.body.start,
@@ -59,7 +60,8 @@ var create = function (req, res) {
         day: req.body.day,
         type: req.body.type,
         available: req.body.type == "lecture" ? true : req.body.available,
-        report_link: req.body.req_link ? req.body.req_link : ''
+        report_link: req.body.req_link ? req.body.req_link : '',
+        number_of_seats: req.body.number_of_seats
     }).then(function (session) {
         // insert categories
         var categories = req.body.categories;
@@ -81,7 +83,7 @@ var update = function (req, res) {
             id: req.params.id
         },
         fields: ['name', 'start', 'end', 'day', 'type',
-            'available', 'report_link']
+            'available', 'report_link','number_of_seats']
     }).then(function (session) {
         if (!session) res.status(404).end();
 

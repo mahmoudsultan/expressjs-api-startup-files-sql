@@ -1,7 +1,8 @@
 var User = require('../models/main')('user');
 var tokenGenerator = require('../helpers/auth_token');
 const bcrypt = require('bcrypt-nodejs');
-
+var Session = require('../models/main')('session');
+var parallel = require('async/parallel');
 
 // TODO: remove 
 // for debugging purpose only
@@ -25,6 +26,10 @@ function show(req, res) {
         where: {
             alias: req.params.alias
         },
+        include: [{
+            model: Session, as: "sessions",
+            attributes: ["id", "name", "type"]
+        }],
         attributes: ['id', 'alias', 'email', 'collage', 'department']
     }).then(function (user) {
         if (!user) {
@@ -167,6 +172,75 @@ function login(req, res) {
     });
 }
 
+// POST /user/:id/add/session/:sid
+var addSession = function (req, res) {
+    parallel([(callback) => {
+        User.findById(req.params.id).then((user) => {
+            if (!user) {
+                callback("User not found", null);
+                res.status(404);
+            }
+            callback(null, user);
+        }).catch((err) => callback(err, null));
+    }, (callback) => {
+        Session.findById(req.params.sid).then((session) => {
+            if (!session) {
+                res.status(404);
+                callback("Session not found", null);
+            }
+            callback(null, session);
+        }).catch((err) => callback(err, null));
+    }], function (err, results) {
+        if (err) res.send({ error: err }).end();
+        var user = results[0];
+        var session = results[1];
+        if(session.number_of_seats - 1 >= 0) {
+            user.addSession(session).then(() => {
+                session.number_of_seats -= 1;
+                session.save();
+                res.status(200).end();
+            }).catch((err) => {
+                res.status(500).send({error: err}).end();
+            });
+        }
+    })
+};
+
+
+// POST /user/:id/remove/session/:sid
+var removeSession = function (req, res) {
+    console.log('*******');
+    console.log(req.params);
+    parallel([(callback) => {
+        User.findById(req.params.id).then((user) => {
+            if (!user) {
+                callback("User not found", null);
+                res.status(404);
+            }
+            callback(null, speaker);
+        }).catch((err) => callback(err, null));
+    }, (callback) => {
+        Session.findById(req.params.sid).then((session) => {
+            if (!session) {
+                res.status(404);
+                callback("Session not found", null);
+            }
+            callback(null, session);
+        }).catch((err) => callback(err, null));
+    }], function (err, results) {
+        if (err) res.send({ error: err }).end();
+        var user = results[0];
+        var session = results[1];
+        user.removeSession(session).then(() => {
+            session.number_of_seats += 1;
+            session.save();
+            res.status(200).end();
+        }).catch((err) => {
+            res.status(500).send({ error: err }).end();
+        });
+    })
+};
+
 module.exports = {
     login: login,
     logout: logout,
@@ -174,5 +248,7 @@ module.exports = {
     show: show,
     update: updateWrapper,
     verify: verify,
-    showUser: showUser
+    showUser: showUser,
+    removeSession:removeSession,
+    addSession:addSession
 };
