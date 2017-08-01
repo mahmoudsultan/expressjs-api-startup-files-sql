@@ -202,6 +202,8 @@ var addSession = function (req, res) {
             }).catch((err) => {
                 res.status(500).send({error: err}).end();
             });
+        } else {
+            res.status(400).send({error: "No enough seats"});
         }
     })
 };
@@ -217,7 +219,7 @@ var removeSession = function (req, res) {
                 callback("User not found", null);
                 res.status(404);
             }
-            callback(null, speaker);
+            callback(null, user);
         }).catch((err) => callback(err, null));
     }, (callback) => {
         Session.findById(req.params.sid).then((session) => {

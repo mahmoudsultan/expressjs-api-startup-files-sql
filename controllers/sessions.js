@@ -1,6 +1,7 @@
 var Session = require('../models/main')('session');
 var Category = require('../models/main')('category');
 var Speaker = require('../models/main')('speaker');
+var User = require('../models/main')('user');
 
 // GET /sessions
 var index = function (req, res) {
@@ -36,7 +37,12 @@ var show = function (req, res) {
         },
         {
             model: Speaker, as: "speakers"
-        }]
+        }
+        ,
+        {
+            model: User, as: "attendes"
+        }
+        ]
     }).then(function (session) {
         if (!session) {
             res.status(404).send({ error: "Session not found" }).end();
