@@ -14,15 +14,20 @@ var index = function (req, res) {
         offset: offset,
         limit: limit,
         include: [{
-            model: Category, as: 'categories'
-        },
-        {
-            model: Speaker, as: "speakers"
-        }]
+                model: Category,
+                as: 'categories'
+            },
+            {
+                model: Speaker,
+                as: "speakers"
+            }
+        ]
     }).then(function (sessions) {
         res.status(200).send(sessions).end();
     }).catch(function (err) {
-        res.status(400).send({ error: err }).end();
+        res.status(400).send({
+            error: err
+        }).end();
     });
 };
 
@@ -33,24 +38,26 @@ var show = function (req, res) {
             id: req.params.id
         },
         include: [{
-            model: Category, as: 'categories'
-        },
-        {
-            model: Speaker, as: "speakers"
-        }
-        ,
-        {
-            model: User, as: "attendes"
-        }
+                model: Category,
+                as: 'categories'
+            },
+            {
+                model: Speaker,
+                as: "speakers"
+            }
         ]
     }).then(function (session) {
         if (!session) {
-            res.status(404).send({ error: "Session not found" }).end();
+            res.status(404).send({
+                error: "Session not found"
+            }).end();
         } else {
             res.send(session).end();
         }
     }).catch(function (err) {
-        res.status(400).send({ error: err }).end();
+        res.status(400).send({
+            error: err
+        }).end();
     });
 };
 
@@ -58,7 +65,6 @@ var show = function (req, res) {
 var create = function (req, res) {
     // type: "lecture", "workshop"
     // if lecture then available by default
-    console.log(req.body);
     Session.create({
         name: req.body.name,
         start: req.body.start,
@@ -75,10 +81,14 @@ var create = function (req, res) {
             session.categories = categories;
             res.status(201).send(session).end();
         }).catch(function (err) {
-            res.status(400).send({ error: err }).end();
+            res.status(400).send({
+                error: err
+            }).end();
         });
     }).catch(function (err) {
-        res.status(400).send({ error: err }).end();
+        res.status(400).send({
+            error: err
+        }).end();
     });
 };
 
@@ -89,7 +99,8 @@ var update = function (req, res) {
             id: req.params.id
         },
         fields: ['name', 'start', 'end', 'day', 'type',
-            'available', 'report_link','number_of_seats']
+            'available', 'report_link', 'number_of_seats'
+        ]
     }).then(function (session) {
         if (!session) res.status(404).end();
 
@@ -99,14 +110,18 @@ var update = function (req, res) {
                 session.setCategories(categories).then(function () {
                     res.status(200).send(session).end();
                 }).catch(function (err) {
-                    res.status(400).send({ error: err }).end();
+                    res.status(400).send({
+                        error: err
+                    }).end();
                 });
             });
         } else {
             res.status(200).send(session).end();
         }
     }).catch(function (err) {
-        res.status(400).send({ error: err }).end();
+        res.status(400).send({
+            error: err
+        }).end();
     });
 };
 
@@ -119,7 +134,9 @@ var destroy = function (req, res) {
     }).then(function () {
         res.status(200).end();
     }).catch(function (err) {
-        res.status(500).send({ error: err }).end();
+        res.status(500).send({
+            error: err
+        }).end();
     });
 };
 

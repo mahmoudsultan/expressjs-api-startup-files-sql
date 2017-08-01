@@ -211,8 +211,6 @@ var addSession = function (req, res) {
 
 // POST /user/:id/remove/session/:sid
 var removeSession = function (req, res) {
-    console.log('*******');
-    console.log(req.params);
     parallel([(callback) => {
         User.findById(req.params.id).then((user) => {
             if (!user) {
