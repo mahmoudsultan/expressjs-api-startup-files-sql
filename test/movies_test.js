@@ -9,7 +9,8 @@ describe("Movies Routers Test ", function () {
 
     var connection = require('../models/main')('connection');
     var Movie = require('../models/main')('movies');
-    var User = require('../models/main')('users');
+    var User = require('../models/main')('user');
+    var user = null;
 
     describe("GET Request", (done) => {
         // Test GET / to return all movies 
@@ -20,11 +21,16 @@ describe("Movies Routers Test ", function () {
                 description: "test movie description"
             }).then(function () {
                 return User.create({
-                    name: "test-user2",
-                    password: "12345",
+                    alias: "test-user2",
+                    name: 'test_name',
+                    email: 'test@test.com',
+                    password: "123456789",
                     token: 'tokentest'
                 });
-            }).then(done()).catch(console.log);
+            }).then(createdUser => {
+                user = createdUser;
+                done()
+            }).catch(done);
         });
 
         it("Should return all movies if GET /", function (done) {
@@ -48,7 +54,7 @@ describe("Movies Routers Test ", function () {
                     ['createdAt', 'desc']
                 ]
             }).then(movie => {
-                console.log(movie.id);
+                // console.log(movie.id);
                 agent.get('/movies/' + movie.id)
                     .set('Authorization', 'Bearer tokentest')
                     .expect('Content-Type', /json/)
@@ -60,7 +66,7 @@ describe("Movies Routers Test ", function () {
                         res.body.id.should.equal(movie.id);
                         done();
                     });
-            });
+            }).catch(done);
         });
 
 
@@ -90,11 +96,7 @@ describe("Movies Routers Test ", function () {
                 title: 'test movie title2'
             }
         }).then(function () {
-            return User.destroy({
-                where: {
-                    name: 'test-user2'
-                }
-            })
+            return user.destroy()
         }).then(done());
     })
 });
