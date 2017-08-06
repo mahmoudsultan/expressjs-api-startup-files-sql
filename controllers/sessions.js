@@ -6,30 +6,35 @@ var User = require('../models/main')('user');
 // GET /sessions
 var index = function (req, res) {
 
-    var page = req.params.page || 0;
-    var limit = req.params.limit || 10;
-    var offset = page * limit;
+        var page = req.params.page || 0;
+        var limit = req.params.limit || 10;
+        var offset = page * limit;
 
-    Session.findAll({
-        offset: offset,
-        limit: limit,
-        include: [{
-                model: Category,
-                as: 'categories'
-            },
-            {
-                model: Speaker,
-                as: "speakers"
-            }
-        ]
-    }).then(function (sessions) {
-        res.status(200).send(sessions).end();
-    }).catch(function (err) {
-        res.status(400).send({
-            error: err
-        }).end();
-    });
-};
+        Session.findAll({
+            offset: offset,
+            limit: limit,
+            include: [
+                {
+                    model: Category,
+                    as: 'categories'
+                },
+                {
+                    model: Speaker,
+                    as: "speakers"
+                },
+                {
+                    model: User
+                }
+            ]
+        }).then(function (sessions) {
+            res.status(200).send(sessions).end();
+        }).catch(function (err) {
+            res.status(400).send({
+                error: err
+            }).end();
+        });
+    }
+    ;
 
 // GET /sessions/:id
 var show = function (req, res) {
@@ -38,12 +43,15 @@ var show = function (req, res) {
             id: req.params.id
         },
         include: [{
-                model: Category,
-                as: 'categories'
-            },
+            model: Category,
+            as: 'categories'
+        },
             {
                 model: Speaker,
-                as: "speakers"
+                as: 'speakers'
+            },
+            {
+                model: User
             }
         ]
     }).then(function (session) {
@@ -63,6 +71,7 @@ var show = function (req, res) {
 
 // POST /sessions
 var create = function (req, res) {
+    console.log(req.body);
     // type: "lecture", "workshop"
     // if lecture then available by default
     Session.create({
